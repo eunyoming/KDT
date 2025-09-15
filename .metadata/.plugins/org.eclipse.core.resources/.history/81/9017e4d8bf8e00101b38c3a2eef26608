@@ -1,0 +1,69 @@
+package com.kedu.controllers;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.kedu.dao.ContactsDAO;
+import com.kedu.dto.ContactsDTO;
+
+@Controller
+@RequestMapping("/contacts")
+public class ContactsController {
+
+	@Autowired
+	ContactsDAO dao;
+
+
+	@RequestMapping(value = "/input")
+	public String input() {
+		return "contacts/input";
+	}
+
+	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	public String insert(ContactsDTO dto) throws Exception{
+
+		dao.insert(dto);
+
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/output")
+	public String getAllList(HttpServletRequest request) throws Exception{
+
+		List<ContactsDTO> list = dao.getAllList();
+		request.setAttribute("list", list);
+
+		return "contacts/output";
+	}
+	
+	@RequestMapping("/delete")
+	public String deleteBySeq(int seq) throws Exception{ 
+		
+		dao.deleteBySeq(seq);
+		
+		return "redirect:/contacts/output";
+	}
+	
+	@RequestMapping("/update")
+	public String updateBySeq(ContactsDTO dto) throws Exception{ 
+		
+		dao.updateBySeq(dto);
+		
+		return "redirect:/contacts/output";
+	}
+
+
+	// 컨트롤러가 보낸 예외를 DS가 받아서 다시 ExceptionHandler로 보냄.
+	@ExceptionHandler
+	public String exceptionHandler(Exception e) {
+		e.printStackTrace();
+		return "redirect:/error";
+	}
+}

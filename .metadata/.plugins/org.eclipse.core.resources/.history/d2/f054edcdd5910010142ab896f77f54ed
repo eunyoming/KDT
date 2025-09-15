@@ -1,0 +1,86 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+
+<!-- 부트스트랩 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+	crossorigin="anonymous">
+
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	type="text/javascript"></script>
+
+
+<style type="text/css">
+.container {
+	margin-top: 20px;
+}
+
+.col-12 {
+	text-align: center;
+}
+</style>
+</head>
+
+<body>
+	<!-- ID 가 중복이라면 -->
+	<c:if test="${isIdExist }">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 mt-3">사용중인 아이디입니다.</div>
+				<div class="col-12 mt-3">
+					<button class="btn btn-outline-primary" id="okBtn">닫기</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$("#okBtn").on("click", function() {
+				// 팝업창을 끄게 만든 객체 : opener 에게 접근할 수 있음.
+				opener.document.getElementById("id").value = "";
+				// id 값을 비우고 닫는 코드.
+				window.close();
+			})
+		</script>
+	</c:if>
+
+	<!-- ID 가 중복이 아니라면 -->
+	<c:if test="${!isIdExist }">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 mt-3">
+					사용가능한 아이디입니다.<br>사용하시겠습니까?
+				</div>
+				<div class="col-12 mt-3">
+					<button class="btn btn-outline-primary" id="okBtn">확인</button>
+					<button class="btn btn-outline-primary" id="noBtn">취소</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			// 중복 안 됐을 때
+			$("#okBtn").on("click", function() {
+				// 중복체크 했다고 boolean 변수 true로 만들어주기
+				opener.isIdCheckedToTrue();
+				window.close();
+			})
+			$("#noBtn").on("click", function() {
+				// 팝업창을 끄게 만든 객체 : opener 에게 접근할 수 있음.
+				opener.document.getElementById("id").value = "";
+				// id 값을 비우고 닫는 코드.
+				window.close();
+			})
+		</script>
+	</c:if>
+
+</body>
+
+</html>

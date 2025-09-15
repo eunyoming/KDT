@@ -1,0 +1,42 @@
+package com.kedu.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.kedu.dto.ContactsDTO;
+
+@Repository
+public class ContactsDAO {
+
+	@Autowired
+	private JdbcTemplate jdbc;
+
+	public int insert(ContactsDTO dto) throws Exception{
+		String sql = "insert into contacts values(contacts_seq.nextval, ?, ?)";
+
+		return jdbc.update(sql, dto.getName(), dto.getPhone());
+	}
+
+	public List<ContactsDTO> getAllList() throws Exception{
+		String sql = "select * from contacts";
+
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(ContactsDTO.class));
+	}
+
+	public int deleteBySeq(int seq) throws Exception{
+		String sql = "delete from contacts where seq = ?";
+
+		return jdbc.update(sql, seq);
+	}
+
+	public int updateBySeq(ContactsDTO dto) throws Exception{
+		String sql = "update contacts set name = ?, phone = ? where seq = ?";
+
+		return jdbc.update(sql, dto.getName(), dto.getPhone(), dto.getSeq());
+	}
+
+}

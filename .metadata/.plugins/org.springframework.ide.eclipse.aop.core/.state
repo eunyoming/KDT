@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop-reference-model>
+<aop-project name="Day02_Basic"/>
+<aop-project name="Day01"/>
+<aop-project name="Day02_Basic_Web"/>
+<aop-project name="Day03_contacts"/>
+</aop-reference-model>

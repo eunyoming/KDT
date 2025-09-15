@@ -1,0 +1,19 @@
+package com.kedu.controllers;
+
+import com.kedu.beans.LGTv;
+
+public class Main {
+	public static void main(String[] args) {
+		
+//		SamsungTv tv = new SamsungTv();
+//		tv.powerOn();
+//		tv.soundUp();
+		
+		// 삼성도 LG도 Tv 클래스의 자손이므로 Tv 클래스로 쓰면 됨.
+		Tv tv = new LGTv();
+		tv.powerOn();
+		tv.volumeUp();
+		
+		
+	}
+}

@@ -1,0 +1,14 @@
+package com.kedu.beans;
+
+public class LGTv {
+
+	private String brand;
+	private int price;
+	
+	public void on() {}
+	public void off() {}
+	public void volumeUp() {}
+	public void volumeDown() {}
+	
+	
+}

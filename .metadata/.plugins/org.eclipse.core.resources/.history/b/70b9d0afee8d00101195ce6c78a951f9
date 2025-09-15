@@ -1,0 +1,39 @@
+package com.kedu.controllers;
+
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+import com.kedu.beans.SamsungTv;
+import com.kedu.beans.Tv;
+
+public class Main {
+	public static void main(String[] args) {
+		
+//		SamsungTv tv = new SamsungTv();
+//		tv.powerOn();
+//		tv.soundUp();
+		
+		// 1. 삼성도 LG도 Tv 클래스의 자손이므로 Tv 클래스로 쓰면 됨. (다형성 사용)
+//		Tv tv = new SamsungTv();
+//		tv.powerOn();
+//		tv.volumeUp();
+		
+		// 2. 팩토리 디자인 패턴
+//		Tv tv = TvFactory.getInstance(args[0]); // 프로그램 외부에서 파라미터로 넣어주자.
+//		tv.powerOn();
+//		tv.volumeUp();
+		// main의 파라미터를 이용 -> 배열이므로 여러개 보낼 수 있음.
+		
+		// Spring 핵심 기능 사용하기 위한 Spring 인스턴스 생성하기
+		// 1. new 할거 없는지 찾음.
+		// 생성자에 xml 파일 넣으면 Spring Pool에 인스턴스를 생성해서 가지고 있음.
+		AbstractApplicationContext ctx = 
+				new GenericXmlApplicationContext("ctx.xml");
+		
+		// Spring 인스턴스야 객체 가져와. 파라미터로 xml 문서의 타입을 적어야 됨.
+		Tv tv = ctx.getBean(Tv.class);
+		System.out.println(((SamsungTv)tv).getBrand());
+		System.out.println(((SamsungTv)tv).getPrice());
+		
+	}
+}

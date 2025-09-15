@@ -1,0 +1,26 @@
+package com.kedu.controllers;
+
+import com.kedu.beans.SamsungTv;
+import com.kedu.beans.Tv;
+import com.kedu.factories.TvFactory;
+
+public class Main {
+	public static void main(String[] args) {
+		
+//		SamsungTv tv = new SamsungTv();
+//		tv.powerOn();
+//		tv.soundUp();
+		
+		// 1. 삼성도 LG도 Tv 클래스의 자손이므로 Tv 클래스로 쓰면 됨. (다형성 사용)
+//		Tv tv = new SamsungTv();
+//		tv.powerOn();
+//		tv.volumeUp();
+		
+		// 2. 팩토리 디자인 패턴
+		Tv tv = TvFactory.getInstance(args[0]); // 프로그램 외부에서 파라미터로 넣어주자.
+		tv.powerOn();
+		tv.volumeUp();
+		// main의 파라미터를 이용 -> 배열이므로 여러개 보낼 수 있음.
+		
+	}
+}

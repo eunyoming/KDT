@@ -1,0 +1,13 @@
+package com.kedu.dao;
+
+import org.springframework.stereotype.Component;
+
+@Component // Component 스캔으로 인스턴스 쉽게 만들 수 있음 @Controller 처럼
+public class MessagesDAO {
+	
+	
+	
+	
+	
+	
+}

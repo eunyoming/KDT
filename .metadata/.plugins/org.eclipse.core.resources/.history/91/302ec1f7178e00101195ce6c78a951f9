@@ -1,0 +1,15 @@
+package com.kedu.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository // Component 스캔으로 인스턴스 쉽게 만들 수 있음 @Controller 처럼
+// Component 라고 해도 되지만, dao는 보통 Repository를 사용한다.
+public class MessagesDAO {
+	
+	public int insert() {}
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,37 @@
+package com.kedu.beans;
+
+public class LGTv implements Tv{ // interface 상속은 extends X, implements O
+
+	private String brand;
+	private int price;
+	
+	public LGTv() {
+		System.out.println("LG TV 생성");
+	}
+	
+	// 강제로 수정하게 함.
+	public void powerOn() {}
+	public void powerOff() {}
+	
+	public void volumeUp() {}
+	public void volumeDown() {}
+
+	
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	
+}

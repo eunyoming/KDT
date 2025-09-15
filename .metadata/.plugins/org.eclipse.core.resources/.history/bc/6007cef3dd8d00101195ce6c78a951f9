@@ -1,0 +1,13 @@
+package com.kedu.beans;
+
+public class SamsungTv {
+
+	private String brand;
+	private int price;
+	
+	public void powerOn() {}
+	public void powerOff() {}
+	public void soundUp() {}
+	public void soundDown() {}
+	
+}

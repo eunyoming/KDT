@@ -1,0 +1,31 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import dto.ContactsDTO;
+
+@Repository
+public class ContactsDAO {
+
+	@Autowired
+	private BasicDataSource bds;
+
+	public int insert(ContactsDTO dto) throws Exception{
+		String sql = "insert into contacts values(contacts_seq.nextval, ?, ?)";
+
+		try(Connection con = bds.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);){
+			
+			pst.setString(1, dto.getName());
+			pst.setString(1, dto.getPhone());
+			
+			return pst.executeUpdate();
+		}
+
+	}
+}

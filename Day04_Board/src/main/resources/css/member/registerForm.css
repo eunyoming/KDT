@@ -1,0 +1,73 @@
+*{
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 500px;
+
+    margin-top: 10px;
+}
+
+.row.title,
+.row.input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.row.input .col input{
+    width: 100%;
+}
+
+.row.input .col input.btn {
+    margin-left: 5px;
+}
+
+.row.title {
+    height: 60px;
+    font-size: 20px;
+    color: #0d6dfb;
+}
+
+.registerBtn,
+.tryAgainBtn {
+    display: flex;
+    align-items: center;
+}
+
+.registerBtn {
+    justify-content: right;
+}
+
+.tryAgainBtn {
+    justify-content: left;
+}
+
+.regTryBtn {
+    height: 90px;
+}
+
+.regTryBtn .col input.btn {
+    width: 120px;
+}
+
+.readonly-disabled[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+#checkIdDupl {
+    display: none;
+    color: red;
+    font-size: 12px;
+}
+
+#passwordDuplicate,
+#passwordRule {
+    display: none;
+    color: red;
+    font-size: 12px;
+}

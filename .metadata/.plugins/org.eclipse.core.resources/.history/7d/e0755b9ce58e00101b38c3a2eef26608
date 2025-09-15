@@ -1,0 +1,9 @@
+package com.kedu.controllers;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+@RequsetMapping("/members")
+public class MembersController {
+
+}

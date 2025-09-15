@@ -1,0 +1,29 @@
+package com.kedu.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller // 파일 옆에 S 붙어 있는 것 : 스프링이 이것을 인스턴스화 시켰다는 의미.
+@RequestMapping("/messages")
+public class MessagesController {
+	
+	@RequestMapping("/input")
+	public String toInput() {
+		return "messages/input";
+	}
+	
+	@RequestMapping("/output")
+	public String toOutput() {
+		return "messages/output";
+	}
+	
+	@RequestMapping("/inputproc")
+	public String inputProc(String sender, String message) {
+		
+		System.out.println(sender + " : " + message);
+		
+		// redirect로 가는 이유 : 데이터 털어내기 위해서
+		return "redirect:/";
+	}
+	
+}

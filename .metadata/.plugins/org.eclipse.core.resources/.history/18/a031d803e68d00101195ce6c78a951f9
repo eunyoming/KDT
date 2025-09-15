@@ -1,0 +1,20 @@
+package com.kedu.factories;
+
+import com.kedu.beans.LGTv;
+import com.kedu.beans.SamsungTv;
+import com.kedu.beans.Tv;
+
+public class TvFactory {
+
+	public static Tv getInstance(String type) {
+		
+		if(type.equals("samsung")) {
+			return new SamsungTv();
+		}else if(type.equals("lg")){
+			return new LGTv();
+		}else {
+			return null;
+		}
+		
+	}
+}

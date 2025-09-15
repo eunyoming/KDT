@@ -1,0 +1,15 @@
+package com.kedu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/file")
+public class FileController {
+
+	@RequestMapping("/upload")
+	public String upload(String text) {
+		return "redirect:/";
+	}
+	
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+
+
+	<!-- new SamsungTv("samsung", 1000000); -->
+	<!-- 생성자 주입 방식 -->
+	<!-- 기본 자료형 : value, id 같은거 : reference -->
+	<bean class="com.kedu.beans.SamsungTv">
+		<constructor-arg ref="speaker" />
+		<constructor-arg value="samsung" />
+		<constructor-arg value="1000000" />
+	</bean>
+
+	<!-- Setter 주입 방식 -->
+	<!-- <bean class="com.kedu.beans.SamsungTv"> <property name="brand" value="samsung"/> 
+		<property name="price" value="1000000"/> </bean> -->
+
+	<!-- new LGTv(); -->
+	<!-- <bean class="com.kedu.beans.LGTv"></bean> -->
+	
+	<!-- new Speaker(); -->
+	<bean id="speaker" class="com.kedu.beans.SonySpeaker">
+
+	</bean>
+</beans>

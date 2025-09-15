@@ -1,0 +1,70 @@
+package com.kedu.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.kedu.dto.MessagesDTO;
+
+@Repository // Component 스캔으로 인스턴스 쉽게 만들 수 있음 @Controller 처럼
+// Component 라고 해도 되지만, dao는 보통 Repository를 사용한다.
+public class MessagesDAO {
+	
+	@Autowired
+	private JdbcTemplate jdbc;
+	
+	public int insert(MessagesDTO dto){ 
+		// checked Exception, runtime Exception(unChecnked Exception)
+		// jdbc 는 checked Exception 으로 바꿔버림
+		String sql = "insert into messages values(messages_seq.nextval, ?, ?)";
+		
+		// 첫번째 인자 : sql, 두번째부터 : 가변 인자
+		return jdbc.update(sql, dto.getSender(), dto.getMessage());
+		
+		// try with resource, connection, preparedStatment 싹 만들어줌.
+	}
+	
+	public int deleteBySeq(int seq) {
+		String sql = "delete from messages where seq = ?";
+		return jdbc.update(sql, seq);
+	}
+	
+	public int updateBySeq(MessagesDTO dto) {
+		String sql = "update messages set sender = ?, message = ? where seq = ?";
+		return jdbc.update(sql, dto.getSender(), dto.getMessage(), dto.getSeq());
+	}
+	/*
+	 * @Autowired private BasicDataSource bds;
+	 * 
+	 * public int insert(MessagesDTO dto) throws Exception{ String sql =
+	 * "insert into messages values(messages_seq.nextval, ?, ?)"; try(Connection con
+	 * = bds.getConnection(); PreparedStatement pst = con.prepareStatement(sql)){
+	 * 
+	 * pst.setString(1, dto.getSender()); pst.setString(2, dto.getMessage()); return
+	 * pst.executeUpdate(); } }
+	 * 
+	 * public List<MessagesDTO> selectAll() throws Exception{ String sql =
+	 * "select * from messages";
+	 * 
+	 * try(Connection con = bds.getConnection(); PreparedStatement pst =
+	 * con.prepareStatement(sql); ResultSet rs = pst.executeQuery();){
+	 * 
+	 * List<MessagesDTO> list = new ArrayList<>();
+	 * 
+	 * while(rs.next()) { int seq = rs.getInt("seq"); String sender =
+	 * rs.getString("sender"); String message = rs.getString("message");
+	 * 
+	 * list.add(new MessagesDTO(seq, sender, message)); } return list; } }
+	 * 
+	 * public int deleteBySeq(int seq) throws Exception{ String sql =
+	 * "delete from messages where seq = ?"; try(Connection con =
+	 * bds.getConnection(); PreparedStatement pst = con.prepareStatement(sql);){
+	 * pst.setInt(1, seq); return pst.executeUpdate(); } }
+	 * 
+	 * public int updateBySeq(MessagesDTO dto) throws Exception{ String sql =
+	 * "update messages set sender=?, message=? where seq=?"; try(Connection con =
+	 * bds.getConnection(); PreparedStatement pst = con.prepareStatement(sql);){
+	 * pst.setString(1, dto.getSender()); pst.setString(2, dto.getMessage());
+	 * pst.setInt(3, dto.getSeq()); return pst.executeUpdate(); } }
+	 */
+}

@@ -1,0 +1,75 @@
+@font-face {
+    font-family: "MaruBuri-Bold";
+    src: url("fonts/MaruBuri-Bold.otf") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "MaruBuri-Regular";
+    src: url("fonts/MaruBuri-Regular.otf") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+.container {
+    /*font-family: "MaruBuri-Regular";*/
+    max-width: 500px !important;
+
+    margin-top: 50px;
+}
+
+.row.title .col,
+.row.idInput .col,
+.row.pwInput .col,
+.row.btns .col,
+.row.checkbox .col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    height: auto;
+}
+
+.row.title {
+    height: 100px;
+    font-size: 24px;
+
+    font-family: "MaruBuri-Bold";
+    color: #0d6dfb;
+}
+
+.row.title .col {
+
+}
+
+.row.btns {
+    height: 100px;
+}
+
+.row.btns .col input {
+    width: 120px;
+}
+
+.row.btns .col.loginBtn {
+    justify-content: right;
+}
+
+.row.btns .col.regBtn {
+    justify-content: left;
+}
+
+.row.checkbox .col .form-label {
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+
+    margin-left: 10px;
+}
+

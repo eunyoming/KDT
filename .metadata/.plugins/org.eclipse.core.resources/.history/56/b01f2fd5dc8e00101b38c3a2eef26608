@@ -1,0 +1,52 @@
+package com.kedu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.kedu.dto.ContactsDTO;
+
+@Repository
+public class ContactsDAO {
+
+	@Autowired
+	private JdbcTemplate jdbc;
+	
+	public int insert(ContactsDTO dto) throws Exception{
+		String sql = "insert into contacts values(contacts_seq.nextval, ?, ?)";
+		
+		return jdbc.update(sql, dto.getName(), dto.getPhone());
+	}
+	
+	public List<ContactsDTO> getAllList() throws Exception{
+		String sql = "select * from contacts";
+		
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(ContactsDTO.class));
+	}
+	
+	public int deleteBySeq(int seq) throws Exception{
+		String sql = "delete from contacts where seq = ?";
+		try(Connection con = bds.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);){
+			pst.setInt(1, seq);
+			return pst.executeUpdate();
+		}
+	}
+	
+	public int updateBySeq(ContactsDTO dto) throws Exception{
+		String sql = "update contacts set name = ?, phone = ? where seq = ?";
+		try(Connection con = bds.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);){
+			pst.setString(1, dto.getName());
+			pst.setString(2, dto.getPhone());
+			pst.setInt(3, dto.getSeq());
+			return pst.executeUpdate();
+		}
+	}
+	
+}

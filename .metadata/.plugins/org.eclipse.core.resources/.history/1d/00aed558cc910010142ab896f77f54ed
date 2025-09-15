@@ -1,0 +1,31 @@
+package com.kedu.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.kedu.dto.ReplyDTO;
+
+public class ReplyDAO {
+	
+	@Autowired
+	JdbcTemplate jdbc;
+	
+	public int insert(ReplyDTO dto) throws Exception{
+		String sql = "insert into reply values(reply_seq.nextval, ?, ?, sysdate, ?)";
+		return jdbc.update(sql, dto.getWriter(), dto.getContents(), dto.getParent_seq());
+	}
+	
+	public List<ReplyDTO> getReplyList(int parent_seq){
+		String sql = "select * from reply where parent_seq = ?";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReplyDTO.class), parent_seq);
+	}
+	
+	
+	
+	
+	
+	
+}

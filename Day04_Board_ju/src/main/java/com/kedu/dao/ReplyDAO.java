@@ -1,0 +1,39 @@
+package com.kedu.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.kedu.dto.ReplyDTO;
+
+@Repository
+public class ReplyDAO {
+	
+	@Autowired
+	JdbcTemplate jdbc;
+	
+	public int insert(ReplyDTO dto) {
+		String sql = "insert into reply values(reply_seq.nextval, ?, ?, sysdate, ?)";
+		return jdbc.update(sql, dto.getWriter(), dto.getContents(), dto.getParent_seq());
+	}
+	
+	public List<ReplyDTO> getReplyList(int parent_seq){
+		String sql = "select * from reply where parent_seq = ?";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReplyDTO.class), parent_seq);
+	}
+	
+	public int updateReplyBySeq(String contents, int seq) {
+		String sql = "update reply set contents = ? where seq = ?";
+		return jdbc.update(sql, contents, seq);
+	}
+	
+	public int deleteReplyBySeq(int seq) {
+		String sql = "delete from reply where seq = ?";
+		return jdbc.update(sql, seq);
+	}
+	
+	
+}

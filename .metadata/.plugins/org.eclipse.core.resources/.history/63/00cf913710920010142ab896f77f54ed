@@ -1,0 +1,36 @@
+package com.kedu.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.kedu.commons.Config;
+import com.kedu.dao.BoardDAO;
+import com.kedu.dto.BoardDTO;
+
+@Controller
+@RequestMapping("/board")
+public class BoardController {
+
+	@Autowired
+	private BoardDAO boardDAO;
+	
+	@RequestMapping("/list")
+	public List<BoardDTO> list(Model m, @RequestParam(defaultValue = "1") int cpage){
+		int recordCountPerPage = Config.RECORD_COUNT_PER_PAGE;
+		int naviCountPerPage = Config.NAVI_COUNT_PER_PATE;
+		
+		int to = cpage * recordCountPerPage;
+		int from = cpage * recordCountPerPage - (recordCountPerPage - 1);
+	}
+	
+	@RequestMapping("/insert")
+	public String insert(BoardDTO dto) {
+		boardDAO.addBoard(dto);
+		return "redirect:/board/list";
+	}
+}

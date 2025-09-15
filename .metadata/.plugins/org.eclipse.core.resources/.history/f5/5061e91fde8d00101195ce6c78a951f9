@@ -1,0 +1,16 @@
+package com.kedu.controllers;
+
+import com.kedu.beans.SamsungTv;
+
+public class Main {
+	public static void main(String[] args) {
+		
+		SamsungTv tv = new SamsungTv();
+		tv.powerOn();
+		tv.soundUp();
+		
+		
+		
+		
+	}
+}

@@ -1,0 +1,42 @@
+package com.kedu.controllers;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.kedu.dao.ReplyDAO;
+import com.kedu.dto.ReplyDTO;
+
+@Controller
+@RequestMapping("/reply")
+public class ReplyController {
+
+	@Autowired
+	private ReplyDAO replyDAO;
+
+	@RequestMapping("/insert")
+	public String insert(ReplyDTO dto) {
+		replyDAO.insert(dto);
+		return "redirect:/board/item?id" + dto.getParent_seq();
+	}
+
+	@RequestMapping("/delte")
+	public String delte(int seq, int parent_seq, String wirter, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		if(wirter.equals(loginId)) {
+			replyDAO.deleteReplyBySeq(seq);
+		}
+		return "redirect:/board/item?id" + parent_seq;
+	}
+
+	@RequestMapping("/update")
+	public String update(ReplyDTO dto, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		if(dto.getWriter().equals(loginId)) {
+			replyDAO.updateReplyBySeq(dto.getContents(), dto.getSeq());
+		}
+		return "redirect:/board/item?id" + dto.getParent_seq();
+	}
+}

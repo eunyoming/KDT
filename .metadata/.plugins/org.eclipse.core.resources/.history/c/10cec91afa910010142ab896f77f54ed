@@ -1,0 +1,6 @@
+package com.kedu.dao;
+
+@Repository
+public class FileDAO {
+
+}

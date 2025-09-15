@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- new SamsungTv("samsung", 1000000) -->
+	<bean class="com.kedu.beans.SamsungTv">
+		<constructor-arg value="samsung"/>
+		<constructor-arg value="1000000"/>
+	</bean>
+	
+	<!-- new LGTv -->
+<!-- 	<bean class="com.kedu.beans.LGTv"></bean> -->
+</beans>

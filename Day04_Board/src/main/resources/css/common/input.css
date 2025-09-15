@@ -1,0 +1,25 @@
+.input {
+    height: 50px;
+}
+
+.input .col {
+    display: flex;
+    justify-content: left !important;
+    align-items: center;
+
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+.input .col.form-label {
+    justify-content: right !important;
+}
+
+.input .col input{
+    width: 80%;
+    height: 90%;
+
+    margin-left: 15px;
+}

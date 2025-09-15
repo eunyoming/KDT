@@ -1,0 +1,17 @@
+package com.kedu.controllers;
+
+import org.springframework.stereotype.Controller;
+
+@Controller // 파일 옆에 S 붙어 있는 것 : 스프링이 이것을 인스턴스화 시켰다는 의미.
+public class MessagesController {
+	
+	@RequestMapping("/messages/input")
+	public String toInput() {
+		return "messages/input";
+	}
+	
+	@RwquestMapping("/messages/output")
+	public String toOutput() {
+		return "messages/output";
+	}
+}

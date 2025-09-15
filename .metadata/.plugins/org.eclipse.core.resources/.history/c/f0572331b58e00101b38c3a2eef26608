@@ -1,0 +1,52 @@
+package com.kedu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.kedu.dto.MessagesDTO;
+
+@Repository // Component 스캔으로 인스턴스 쉽게 만들 수 있음 @Controller 처럼
+// Component 라고 해도 되지만, dao는 보통 Repository를 사용한다.
+public class MessagesDAO {
+	
+	@Autowired
+	private BasicDataSource bds;
+	
+	public int insert(MessagesDTO dto) throws Exception{
+		String sql = "insert into messages values(messages_seq.nextval, ?, ?)";
+		try(Connection con = bds.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql)){
+			
+			pst.setString(1, dto.getSender());
+			pst.setString(2, dto.getMessage());
+			return pst.executeUpdate();
+		}
+	}
+	
+	public List<MessagesDTO> selectAll() throws Exception{
+			String sql = "select * from messages";
+			
+			try(Connection con = bds.getConnection();
+					PreparedStatement pst = con.prepareStatement(sql);
+					ResultSet rs = pst.executeQuery();){
+				
+				List<MessagesDTO> list = new ArrayList<>();
+				
+				while(rs.next()) {
+					int seq = rs.getInt("seq");
+					String sender = rs.getString("sender");
+					String message = rs.getString("message");
+					
+					list.add(new MessagesDTO(seq, sender, message));
+				}
+				
+			}
+	}
+}

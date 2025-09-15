@@ -1,0 +1,46 @@
+package com.kedu.controllers;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.kedu.dao.ReplyDAO;
+import com.kedu.dto.ReplyDTO;
+
+@Controller
+@RequestMapping("/reply")
+public class ReplyController {
+
+	@Autowired
+	private ReplyDAO replyDAO;
+
+	@RequestMapping("/insert")
+	public String insert(String comment, int parentSeq, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		ReplyDTO dto = new ReplyDTO(0, loginId, comment, null, parentSeq);
+		System.out.println(dto.getContents() + " :" + dto.getParent_seq());
+		replyDAO.insert(dto);
+		return "redirect:/board/item?id=" + dto.getParent_seq();
+	}
+
+	@RequestMapping("/delete")
+	public String delte(int seq, int parentSeq, String wirter, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		if(wirter.equals(loginId)) {
+			replyDAO.deleteReplyBySeq(seq);
+		}
+		return "redirect:/board/item?id=" + parentSeq;
+	}
+
+	@RequestMapping("/update")
+	public String update(ReplyDTO dto, int parentSeq, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		dto.setParent_seq(parentSeq);
+		if(dto.getWriter().equals(loginId)) {
+			replyDAO.updateReplyBySeq(dto.getContents(), dto.getSeq());
+		}
+		return "redirect:/board/item?id=" + dto.getParent_seq();
+	}
+}

@@ -1,0 +1,54 @@
+package com.kedu.controllers;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.kedu.commons.CustomEncrypt;
+import com.kedu.dao.MembersDAO;
+import com.kedu.dto.MembersDTO;
+
+@Controller
+@RequestMapping("/members")
+public class MembersController {
+
+	@Autowired
+	MembersDAO dao;
+
+	public String insert(MembersDTO dto, HttpSession session) throws Exception{
+		// 비밀번호 암호화
+		dto.setPw(CustomEncrypt.encrypt(dto.getPw()));
+		dao.insert(dto);
+
+		return "redirect:/";
+	}
+
+	public String deleteById(String id) throws Exception{
+
+		dao.deleteById(id);
+
+		return "redirect:/";
+	}
+	
+	public String updatePage() {
+		return "/mypage_update";
+	}
+
+	public String updateById(MembersDTO dto) throws Exception{
+
+		dao.updateById(dto);
+
+		return "redirect:/";
+	}
+
+
+
+	@ExceptionHandler(Exception.class) // 예외계 Object 같은 느낌 모든 예외의 조상
+	public String exceptionHandler(Exception e) {
+		e.printStackTrace();
+		return "redirect:/error";
+	}
+}

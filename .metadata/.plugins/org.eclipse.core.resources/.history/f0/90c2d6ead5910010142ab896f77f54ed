@@ -1,0 +1,193 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<!-- 부트스트랩 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+	crossorigin="anonymous">
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+	integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+	crossorigin="anonymous"></script>
+<!-- 다음 우편번호 API -->
+<script
+	src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<style>
+body {
+	background-color: rgba(245, 242, 242, 0.856);
+}
+
+.container {
+	max-width: 700px;
+}
+
+.input_style {
+	width: 30%;
+	height: 80%;
+}
+
+.join_btn {
+	width: 100px;
+	border: 1px solid rgb(255, 85, 215);
+	background-color: white;
+	color: rgb(155, 93, 248);
+	border-radius: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.post_input {
+	width: 30%;
+	height: 100%;
+}
+</style>
+</head>
+
+<body>
+	<c:choose>
+		<c:when test="${loginId == null}">
+			<script>
+				alert("로그인 후 이용해주세요.");
+				location.href = "/index.jsp";
+			</script>
+		</c:when>
+
+		<c:otherwise>
+			<div class="container mt-3">
+				<div class="row">
+					<div
+						class="col mb-2 d-flex justify-content-left align-items-center">
+						<a href="/mypage.members" class="card-link me-3"> <img
+							src="/img/left-arrow.png"></a>
+						<h2 class="card-title">계정 정보</h2>
+					</div>
+				</div>
+				<!-- 계정 정보 -->
+				<form action="/update.members" method="post">
+					<div class="card account row mt-3">
+						<div class="card-body">
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">사용자 ID</h6>
+								<h6>${loginId}</h6>
+							</div>
+
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">전화번호</h6>
+								<input type="text" class="input_style" id="phone" name="phone"
+									value="${dto.phone}">
+							</div>
+
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">이메일 주소</h6>
+								<input type="text" class="input_style" id="email" name="email"
+									value="${dto.email}">
+							</div>
+
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">우편번호</h6>
+								<div
+									class="post_input d-flex justify-content-between align-items-center">
+									<input type="text" class="input_style me-1" id="postcode"
+										name="postcode" value="${dto.zipcode}" style="width: 90%">
+									<input type="button" onclick="sample4_execDaumPostcode()"
+										value="찾기" class="btn p-0">
+								</div>
+							</div>
+
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">주소</h6>
+								<input type="text" class="input_style" id="address1"
+									name="address1" value="${dto.address1}">
+							</div>
+
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">상세 주소</h6>
+								<input type="text" class="input_style" id="address2"
+									name="address2" value="${dto.address2}">
+							</div>
+
+							<div
+								class="col d-flex justify-content-between align-items-center mb-2">
+								<h6 class="card-subtitle text-body-secondary">본인확인</h6>
+								<h6>
+									본인확인 완료 <img src="/img/check.png" style="height: 18px">
+								</h6>
+							</div>
+
+							<div
+								class="col d-flex justify-content-center align-items-center mb-2">
+								<button type="submit" class="join_btn" id="updateBtn">수정완료</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<script>
+			// 다음 우편번호 API
+			function sample4_execDaumPostcode() {
+				new daum.Postcode({
+					oncomplete : function(data) {
+						// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+						// 우편번호와 주소 정보를 해당 필드에 넣는다.
+						$("#postcode").val(data.zonecode);
+						$("#address1").val(data.roadAddress);
+					}
+				}).open();
+			}
+
+				// (유효성 검사)
+				$("form")
+						.on(
+								"submit",
+								function() {
+									// 정규식
+									let regexName = /^[a-zA-Z가-힣]{2,6}$/
+									let regexPhone = /^010[0-9]{8}$|^010-[0-9]{4}-[0-9]{4}$/;
+									let regexEmail = /^[\da-z_]{4,12}@[\w\d]+(\.com|\.co\.kr)$/;
+
+									// phone
+									let phone = $("#phone").val();
+									if (phone == "") {
+										alert("전화번호를 입력해주세요.\n(예:01012341234 또는 010-1234-1234)");
+										$("#phone").focus();
+										return false;
+									}
+
+									if (!regexPhone.test(phone)) {
+										alert("전화번호 형식이 맞지 않습니다.\n(예:01012341234 또는 010-1234-1234)");
+										$("#phone").focus();
+										return false;
+									}
+
+									// 이메일
+									let email = $("#email").val();
+
+									if (email != "") {
+										if (!regexEmail.test(email)) {
+											alert("이메일 형식이 올바르지 않습니다.\n예시 : 영문 및 숫자@naver.com\n예시2 : 영문 및 숫자@naver.co.kr");
+											$("#email").focus();
+											return false;
+										}
+									}
+								})
+			</script>
+		</c:otherwise>
+	</c:choose>
+</body>
+</html>
