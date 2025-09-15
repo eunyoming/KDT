@@ -2,6 +2,7 @@ package com.kedu.dao;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,12 +13,13 @@ import com.kedu.dto.BoardDTO;
 @Repository
 public class BoardDAO {
 
+	@Autowired
 	private JdbcTemplate jdbc;
 
 	// insert
 	public int addBoard(BoardDTO dto){
-		String sql = "insert into board values(board_seq.nextval, ?, ?, ?, sysdate, ?)";
-		return jdbc.update(sql, dto.getWriter(), dto.getTitle(), dto.getContents(), 0);
+		String sql = "insert into board (seq, writer, title, contents, create_at, view_count) values (board_seq.nextval, ?, ?, ?, sysdate, 0)";
+		return jdbc.update(sql, dto.getWriter(), dto.getTitle(), dto.getContents());
 //		try(Connection con = this.getConnection();
 //				PreparedStatement pst = con.prepareStatement(sql)){
 //			pst.setString(1, dto.getWriter());
@@ -207,5 +209,10 @@ public class BoardDAO {
 
 		return sb.toString();
 	}
+	
+	public void updateViewCntById(int target) {
+        String sql = "UPDATE board SET view_count = view_count+1 WHERE seq=?";
+        jdbc.update(sql, target);
+    }
 }
 

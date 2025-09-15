@@ -129,7 +129,7 @@
 		<c:when test="${loginId == null}">
 			<script>
 				alert("로그인 후 이용해주세요.");
-				location.href = "/index.jsp";
+				location.href = "/";
 			</script>
 		</c:when>
 

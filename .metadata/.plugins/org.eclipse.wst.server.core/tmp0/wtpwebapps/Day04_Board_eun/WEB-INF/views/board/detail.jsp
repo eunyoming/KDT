@@ -147,7 +147,7 @@
 		<c:when test="${loginId == null}">
 			<script>
 				alert("로그인 후 이용해주세요.");
-				location.href = "/index.jsp";
+				location.href = "/";
 			</script>
 		</c:when>
 
@@ -170,7 +170,7 @@
 					<!-- 날짜, 조회수 -->
 					<div class="row date-view">
 						<div class="col">
-							<fmt:formatDate value="${dto.write_date}"
+							<fmt:formatDate value="${dto.create_at}"
 								pattern="yyyy-MM-dd HH:mm:ss" />
 							| ${dto.view_count }
 						</div>
@@ -307,7 +307,7 @@
 				// 목록으로 버튼 클릭시
 				$("#listBtn").on("click", function() {
 					// 목록으로 보내기
-					window.location.href = "/list.board?cpage=1";
+					window.location.href = "/board/list";
 				});
 
 				// 수정완료 버튼 클릭시

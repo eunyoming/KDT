@@ -7,7 +7,7 @@ public class BoardDTO {
 	private String writer;
 	private String title;
 	private String contents;
-	private Timestamp write_date;
+	private Timestamp create_at;
 	private int view_count = 0;
 	public int getSeq() {
 		return seq;
@@ -33,11 +33,11 @@ public class BoardDTO {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	public Timestamp getWrite_date() {
-		return write_date;
+	public Timestamp getCreate_at() {
+		return create_at;
 	}
-	public void setWrite_date(Timestamp write_date) {
-		this.write_date = write_date;
+	public void setCreate_at(Timestamp create_at) {
+		this.create_at = create_at;
 	}
 	public int getView_count() {
 		return view_count;
@@ -45,14 +45,16 @@ public class BoardDTO {
 	public void setView_count(int view_count) {
 		this.view_count = view_count;
 	}
-	public BoardDTO() {
-	}
-	public BoardDTO(int seq, String writer, String title, String contents, Timestamp write_date, int view_count) {
+	public BoardDTO(int seq, String writer, String title, String contents, Timestamp create_at, int view_count) {
+		super();
 		this.seq = seq;
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;
-		this.write_date = write_date;
+		this.create_at = create_at;
 		this.view_count = view_count;
 	}
+	public BoardDTO() {
+	}
+	
 }

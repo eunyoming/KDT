@@ -100,7 +100,7 @@
 		<c:when test="${loginId == null}">
 			<script>
 				alert("로그인 후 이용해주세요.");
-				location.href = "/index.jsp";
+				location.href = "/";
 			</script>
 		</c:when>
 
@@ -136,7 +136,7 @@
 									</div>
 									<div class="col-2">${dto.writer}</div>
 									<div class="col-4">
-										<fmt:formatDate value="${dto.write_date}"
+										<fmt:formatDate value="${dto.create_at}"
 											pattern="yyyy-MM-dd HH:mm:ss" />
 									</div>
 									<div class="col-1">${dto.view_count}</div>
