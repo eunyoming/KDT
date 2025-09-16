@@ -20,79 +20,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
             crossorigin="anonymous"></script>
-<style>
-* {
-	box-sizing: border-box;
-}
 
-.container {
-	margin-top: 15px;
-	max-width:800px;
-}
+<!-- css -->
+<link rel="stylesheet" href="/resources/css/board/list.css">
 
-.header {
-	height: 5%;
-	text-align: center;
-	margin-bottom: 10px;
-}
-
-.header div {
-	font-size: 24px;
-}
-
-.title {
-	height: 5%;
-	text-align: center;
-	background-color: black;
-	color: white;
-}
-
-.contents {
-	height: 480px;
-	overflow: auto;
-}
-.titles{
-	color:black;
-}
-
-/* .contents div {
-   display: flex;
-   justify-content: center;
-   text-align: center;
-} */
-.board-item {
-	padding: 0;
-	margin: 0;
-	border-bottom: 1px solid lightgray;
-	height: 10%;
-}
-
-.board-item:hover{
-	background-color:lightgray;
-}
-
-.board-item div {
-	padding: 0;
-	margin: 0;
-	height: auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.naviPage {
-	height: 5%;
-	text-align: center;
-	margin-top : 10px;
-	margin-bottom : 10px;
-}
-
-.footer {
-	height: 5%;
-	text-align: right;
-}
-
-</style>
 </head>
 
 <body>

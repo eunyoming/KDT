@@ -27,101 +27,10 @@
 
 <!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
-<style>
-* {
-	box-sizing: border-box;
-}
 
-.container {
-	margin-top: 15px;
-	padding: 0;
-	max-width: 800px;
-	height: 100vh;
-}
+<!-- css -->
+<link rel="stylesheet" href="/resources/css/board/write.css">
 
-/* header */
-.header {
-	width: 100%;
-	height: 5vh;
-	text-align: center;
-	font-size: 18px;
-	background-color: black;
-	color: white;
-}
-
-/* title */
-.title {
-	width: 100%;
-	height: 5vh;
-}
-
-.title div {
-	width: 100%;
-	padding: 0;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-}
-
-.title input {
-	width: 70%;
-	height: 100%;
-}
-
-/* contents */
-.contents {
-	width: 100%;
-	height: 80vh;
-}
-
-.contentsDiv {
-	width: 100%;
-	height: 100%;
-	flex-grow: 1; /* 남은 공간을 모두 차지 */
-	padding: 0;
-	border: 1px solid black;
-}
-
-/* footer */
-.footer {
-	width: 100%;
-	height: 5vh;
-}
-
-.footer div {
-	height: 100%;
-	margin-top: 10px;
-	display: flex;
-	justify-content: end;
-	align-items: center;
-	gap: 5px;
-}
-
-/* Summernote 스타일 */
-.note-editable * {
-	margin: 0 !important;
-}
-/* 아래 높이조절바 없애기 */
-.note-resize, .note-statusbar, .note-editor .note-resizebar {
-	display: none !important;
-}
-.note-toolbar .dropdown-toggle::after {
-  display: none !important;
-}
-.note-editor {
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* 전체 에디터 높이 */
-}
-
-.note-toolbar {
-  flex-shrink: 0;
-}
-
-.note-editable {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-</style>
 </head>
 
 <body>

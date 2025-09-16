@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Join">
+
+	<select id="isIdExist" resultType="java.lang.String">
+		select id from members where
+		id like #{id}
+	</select>
+	<select id="checkLogin" resultType="int">
+		select count(*) from members
+		where id = #{loginId} and pw = #{pw}
+	</select>
+	<select id="getMemberById" resultType="com.kedu.dto.MembersDTO">
+		select id, name, phone,
+		email, zipcode, address1, address2, join_date from members where id =
+		#{id}
+	</select>
+
+	<insert id="insert">
+		insert into members values(#{id}, #{pw}, #{name},
+		#{phone}, #{email}, #{zipcode}, #{address1}, #{address2}, sysdate)
+	</insert>
+
+	<delete id="deleteById">
+		delete from members where id=#{id}
+	</delete>
+
+	<update id="updateById">
+		update members
+		set phone = #{phone, jdbcType=VARCHAR},
+		email = #{email, jdbcType=VARCHAR},
+		zipcode = #{zipcode, jdbcType=VARCHAR},
+		address1 = #{address1, jdbcType=VARCHAR},
+		address2 = #{address2, jdbcType=VARCHAR}
+		where id = #{id, jdbcType=VARCHAR}
+	</update>
+
+</mapper>

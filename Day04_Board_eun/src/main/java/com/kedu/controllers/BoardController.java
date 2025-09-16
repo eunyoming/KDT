@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.kedu.commons.Config;
 import com.kedu.dao.BoardDAO;
 import com.kedu.dto.BoardDTO;
+import com.kedu.services.BoardService;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
 
 	@Autowired
-	private BoardDAO boardDAO;
+	private BoardService boardService;
 	
 	@RequestMapping("/write")
 	public String write() {
@@ -32,36 +33,41 @@ public class BoardController {
 		int recordCountPerPage = Config.RECORD_COUNT_PER_PAGE;
 		int naviCountPerPage = Config.NAVI_COUNT_PER_PATE;
 		
-		int to = cpage * recordCountPerPage;
-		int from = cpage * recordCountPerPage - (recordCountPerPage - 1);
-		
-		List<BoardDTO> list = boardDAO.getSelectFromTo(from, to);
-		String navi = boardDAO.getPageNavi(cpage);
+		List<BoardDTO> list = boardService.getSelectFromTo(cpage);
 		m.addAttribute("list", list);
 		m.addAttribute("currentPage", cpage);
 		m.addAttribute("naviCountPerPage", naviCountPerPage);
 		m.addAttribute("recordCountPerPage", recordCountPerPage);
-		m.addAttribute("recordTotalCount", boardDAO.getRecordTotalCount());
+		m.addAttribute("recordTotalCount", boardService.getRecordTotalCount());
 		return "board/list";
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insert(BoardDTO dto, HttpSession session) {
 		String loginId = (String)session.getAttribute("loginId");
-		dto.setWriter(loginId);
-		boardDAO.addBoard(dto);
+		boardService.addBoard(loginId, dto);
 		return "redirect:/board/list";
 	}
 	
 	@RequestMapping("/detail")
 	public String detail(int seq, Model m) {
 		// 조회수 증가
-		boardDAO.updateViewCntById(seq);
-		BoardDTO dto = boardDAO.getListBySeq(seq);
+		boardService.updateViewCntBySeq(seq);
+		BoardDTO dto = boardService.getListBySeq(seq);
 		m.addAttribute("dto", dto);
 		return "/board/detail";
 	}
 	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(BoardDTO dto) {
+		boardService.updateBySeq(dto);
+		return "redirect:/board/detail?seq=" + dto.getSeq();
+	}
 	
-	
+	@RequestMapping("/delete")
+	public String delete(int seq) {
+		// 조회수 증가
+		boardService.deleteBySeq(seq);
+		return "redirect:/board/list";
+	}
 }

@@ -1,0 +1,32 @@
+package com.kedu.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kedu.dao.ContactsDAO;
+import com.kedu.dto.ContactsDTO;
+
+@Service
+public class ContactsService {
+	
+	@Autowired
+	private ContactsDAO dao;
+	
+	public int insert(ContactsDTO dto) {
+		return dao.insert(dto);
+	}
+	
+	public int deleteBySeq(int seq) {
+		return dao.deleteBySeq(seq);
+	}
+	
+	public int updateBySeq(ContactsDTO dto) {
+		return dao.updateBySeq(dto);
+	}
+	
+	public List<ContactsDTO> getAllList() {
+		return dao.getAllList();				
+	}
+}

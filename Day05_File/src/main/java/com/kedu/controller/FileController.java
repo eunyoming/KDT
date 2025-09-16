@@ -16,38 +16,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kedu.dao.FileDAO;
 import com.kedu.dto.FileDTO;
+import com.kedu.services.FileService;
 
 @Controller
 @RequestMapping("/file")
 public class FileController {
 
 	@Autowired
-	private FileDAO fileDAO;
+	private FileService fileService;	
 
 	@RequestMapping("/upload")
 	public String upload(String text, MultipartFile[] files, HttpSession session) throws Exception{
 		String realPath = session.getServletContext().getRealPath("upload");
-		System.out.println(realPath + " : " + realPath);
 
-		File realPathFile = new File(realPath);
-		if(!realPathFile.exists()) {
-			realPathFile.mkdir();
-		}
+//		File realPathFile = new File(realPath);
+//		if(!realPathFile.exists()) {
+//			realPathFile.mkdir();
+//		}
 		for(MultipartFile file : files) {
 			// 파일이 비어있지 않다면
 			if(!file.isEmpty()) {
 				String oriName = file.getOriginalFilename();
 				// UUID : 유니크한 식별자 ID를 만들어내는 함수
-				String sysName = UUID.randomUUID() + "_" + oriName;
+//				String sysName = UUID.randomUUID() + "_" + oriName;
 
 				// upload 파일에 저장 ( 파일경로 + 파일명 )
-				file.transferTo(new File(realPath + "/" + sysName));
-
+//				file.transferTo(new File(realPath + "/" + sysName));
+				fileService.upload(text, realPath, oriName, file.getBytes());
 				// DB 작업
-				fileDAO.insert(new FileDTO(0, text, oriName, sysName, 0));
+//				fileService.insert(new FileDTO(0, text, oriName, sysName, 0));
 			}
+			
+			
 		}
 		return "redirect:/";
 	}
@@ -55,7 +56,7 @@ public class FileController {
 	@ResponseBody
 	@RequestMapping("/list")
 	public List<FileDTO> list() {
-		return fileDAO.getAllFiles();
+		return fileService.getAllFiles();
 	}
 	
 	@RequestMapping("/download")

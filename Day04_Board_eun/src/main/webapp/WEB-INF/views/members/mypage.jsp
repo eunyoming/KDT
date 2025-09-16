@@ -7,34 +7,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 <!-- 부트스트랩 -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-	crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
 
-<style>
-.container{
-	margin-top:15px;
-	max-width:800px;
-}
-.headercard {
-	background-color: black;
-	color: white;
-}
+<!-- css -->
+<link rel="stylesheet" href="/resources/css/members/mypage.css">
 
-.detailBtn {
-	border: 0;
-	background-color: white;
-}
-
-#backBtn {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-</style>
 </head>
 
 <body>
@@ -42,7 +28,7 @@
 		<c:when test="${loginId == null}">
 			<script>
 				alert("로그인 후 이용해주세요.");
-				location.href = "/index.jsp";
+				location.href = "/";
 			</script>
 		</c:when>
 
@@ -52,7 +38,7 @@
 				<div class="row header">
 					<div class="col-12 card mb-3 headercard" style="width: 100%">
 						<div class="card-body">
-							<h5 class="card-title">${dto.name}님</h5>
+							<h5 class="card-title" id="name"></h5>
 							<p class="card-text" style="color: gray">${loginId}</p>
 						</div>
 					</div>
@@ -64,8 +50,7 @@
 						<div
 							class="col mb-2 d-flex justify-content-between align-items-center">
 							<h5 class="card-title">계정 정보</h5>
-							<a href="mypage_update.members" class="card-link"><img
-								src="/img/right-arrow.png"></a>
+							<a href="/members/mypage_update" class="card-link">&gt;</a>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
@@ -75,32 +60,32 @@
 
 						<div class="col d-flex justify-content-between align-items-center">
 							<h6 class="card-subtitle mb-2 text-body-secondary">전화번호</h6>
-							<h6>${dto.phone}</h6>
+							<h6 id="phone"></h6>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
 							<h6 class="card-subtitle mb-2 text-body-secondary">이메일 주소</h6>
-							<h6>${dto.email}</h6>
+							<h6 id="email"></h6>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
 							<h6 class="card-subtitle mb-2 text-body-secondary">우편번호</h6>
-							<h6>${dto.zipcode}</h6>
+							<h6 id="zipcode"></h6>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
 							<h6 class="card-subtitle mb-2 text-body-secondary">주소</h6>
-							<h6>${dto.address1}</h6>
+							<h6 id="address1"></h6>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
 							<h6 class="card-subtitle mb-2 text-body-secondary">상세 주소</h6>
-							<h6>${dto.address2}</h6>
+							<h6 id="address2"></h6>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
 							<h6 class="card-subtitle mb-2 text-body-secondary">회원가입한 날짜</h6>
-							<h6>${dto.join_date}</h6>
+							<h6 id="join_date"></h6>
 						</div>
 
 						<div class="col d-flex justify-content-between align-items-center">
@@ -120,9 +105,23 @@
 			</div>
 
 			<script>
-				document.getElementById("backBtn").onclick = function() {
+			$(function(){
+				$.ajax({
+					url:"/members/mypage_data"
+				}).done(function(resp){
+					$("#name").text(resp.name + "님");
+	                $("#phone").text(resp.phone);
+	                $("#email").text(resp.email || "");
+	                $("#zipcode").text(resp.zipcode || "");
+	                $("#address1").text(resp.address1 || "");
+	                $("#address2").text(resp.address2 || "");
+	                $("#join_date").text(resp.join_date);
+				})
+				
+				$("#backBtn").on("click", function() {
 					window.location.href = "/";
-				}
+				});
+			})
 			</script>
 		</c:otherwise>
 	</c:choose>

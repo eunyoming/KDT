@@ -1,0 +1,25 @@
+package com.kedu.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kedu.commons.Config;
+import com.kedu.dao.BoardDAO;
+import com.kedu.dto.BoardDTO;
+
+@Service
+public class BoardService {
+	
+	@Autowired
+	private BoardDAO boardDAO;
+	
+	public List<BoardDTO> getSelectFromTo(int cpage){
+		int recordCountPerPage = Config.RECORD_COUNT_PER_PAGE;
+		int naviCountPerPage = Config.NAVI_COUNT_PER_PATE;
+		
+		int to = cpage * recordCountPerPage;
+		int from = cpage * recordCountPerPage - (recordCountPerPage - 1);
+	}
+}

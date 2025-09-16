@@ -2,9 +2,8 @@ package com.kedu.dao;
 
 import java.util.List;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kedu.dto.ContactsDTO;
@@ -13,30 +12,26 @@ import com.kedu.dto.ContactsDTO;
 public class ContactsDAO {
 
 	@Autowired
-	private JdbcTemplate jdbc;
+	private SqlSessionTemplate mybatis;
 
-	public int insert(ContactsDTO dto) throws Exception{
-		String sql = "insert into contacts values(contacts_seq.nextval, ?, ?)";
-
-		return jdbc.update(sql, dto.getName(), dto.getPhone());
+	public int insert(ContactsDTO dto) {
+		return mybatis.insert("Contacts.insert", dto);
 	}
 
-	public List<ContactsDTO> getAllList() throws Exception{
-		String sql = "select * from contacts";
-
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(ContactsDTO.class));
+	public List<ContactsDTO> getAllList() {
+		return mybatis.selectList("Contacts.getAllList");
 	}
 
-	public int deleteBySeq(int seq) throws Exception{
+	public int deleteBySeq(int seq) {
 		String sql = "delete from contacts where seq = ?";
 
-		return jdbc.update(sql, seq);
+		return mybatis.delete("Contacts.deleteBySeq", seq);
 	}
 
-	public int updateBySeq(ContactsDTO dto) throws Exception{
+	public int updateBySeq(ContactsDTO dto) {
 		String sql = "update contacts set name = ?, phone = ? where seq = ?";
 
-		return jdbc.update(sql, dto.getName(), dto.getPhone(), dto.getSeq());
+		return mybatis.update("Contacts.updateBySeq", dto);
 	}
 
 }

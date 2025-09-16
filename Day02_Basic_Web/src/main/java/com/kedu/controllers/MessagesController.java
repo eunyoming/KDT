@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.kedu.dao.MessagesDAO;
 import com.kedu.dto.MessagesDTO;
+import com.kedu.services.MessagesService;
 
 @Controller // 파일 옆에 S 붙어 있는 것 : 스프링이 이것을 인스턴스화 시켰다는 의미.
 @RequestMapping("/messages")
 public class MessagesController {
 
 	@Autowired
-	private MessagesDAO dao;
+	private MessagesService mServ;
 
 	@RequestMapping("/input")
 	public String toInput() {
@@ -27,7 +27,7 @@ public class MessagesController {
 	@RequestMapping("/output")
 	public String toOutput(Model m) throws Exception{
 		
-		List<MessagesDTO> list = dao.selectAll();
+		List<MessagesDTO> list = mServ.selectAll();
 		m.addAttribute("list", list);
 		
 		return "messages/output";
@@ -39,7 +39,7 @@ public class MessagesController {
 
 		System.out.println(dto.getSeq() + " : " + dto.getSender() + " : " + dto.getMessage());
 
-		dao.insert(dto);
+		mServ.insert(dto);
 
 		// redirect로 가는 이유 : 데이터 털어내기 위해서
 		return "redirect:/";
@@ -48,7 +48,7 @@ public class MessagesController {
 	@RequestMapping("/delete")
 	public String deleteBySeq(int seq) throws Exception{ 
 		
-		dao.deleteBySeq(seq);
+		mServ.deleteBySeq(seq);
 		
 		return "redirect:/messages/output";
 	}
@@ -56,11 +56,39 @@ public class MessagesController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateBySeq(MessagesDTO dto) throws Exception{ 
 		
-		dao.updateBySeq(dto);
+		mServ.updateBySeq(dto);
 		
 		return "redirect:/messages/output";
 	}
 	
+	@RequestMapping("/selectBy")
+	public String selectBy(String column, String keyword) throws Exception{
+		System.out.println(column + " : " + keyword);
+		List<MessagesDTO> list = mServ.selectBy(column, keyword);
+		for(MessagesDTO dto : list) {
+			System.out.println(dto.getSeq() + " : " + dto.getSender() + " : " + dto.getMessage());	
+		}
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/searchtByMultiple")
+	public String searchtByMultiple(String sender, String message) throws Exception{
+		List<MessagesDTO> list = mServ.searchtByMultiple(sender, message);
+		for(MessagesDTO dto : list) {
+			System.out.println(dto.getSeq() + " : " + dto.getSender() + " : " + dto.getMessage());	
+		}
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/selectBySeq")
+	public String selectBySeq(int seq) throws Exception{
+		
+	}
+	
+	@RequestMapping("/selectCount")
+	public String selectCount(String sender, String message) throws Exception{
+		
+	}
 	// 컨트롤러가 보낸 예외를 DS가 받아서 다시 ExceptionHandler로 보냄.
 	// 예외마다 각각 처리를 다르게 하고 싶으면 옆에 원하는 예외 붙이기.
 	// 컨트롤러가 많아지면 예외전용 컨트롤러를 만들어서 예외를 처리하게 됨.

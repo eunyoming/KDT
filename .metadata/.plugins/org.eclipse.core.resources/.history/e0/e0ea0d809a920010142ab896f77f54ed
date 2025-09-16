@@ -1,0 +1,9 @@
+package com.kedu.services;
+
+import org.springframework.stereotype.Service;
+
+// 컴포넌트로 인스턴스화 필요
+@Service
+public class MessagesService {
+	
+}

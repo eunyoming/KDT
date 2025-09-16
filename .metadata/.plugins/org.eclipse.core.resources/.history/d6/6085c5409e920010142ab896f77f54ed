@@ -1,0 +1,22 @@
+package com.kedu.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kedu.dao.FileDAO;
+import com.kedu.dto.FileDTO;
+
+@Service
+public class FileService {
+	
+	@Autowired
+	private FileDAO fileDAO;
+	
+	public List<FileDTO> getAllFiles(){
+		return fileDAO.getAllFiles();
+	}
+	
+	
+}

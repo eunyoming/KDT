@@ -19,126 +19,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
             crossorigin="anonymous"></script>
-<style>
-* {
-	box-sizing: border-box;
-}
 
-.container {
-	margin-top: 15px;
-	margin-left: auto;
-	margin-right: auto;
-	padding-top: 15px;
-	padding-left: 15px;
-	padding-right: 15px;
-	max-width: 800px;
-	height: 800px;
-	padding-top: 15px;
-}
-/* 글 박스 */
-.contentsBox {
-	height: 580px;
-	margin-bottom: 5px;
-	border: 1px solid black;
-	padding-top: 15px;
-	padding-left: 15px;
-	padding-right: 15px;
-}
-/* 제목 */
-.title {
-	font-size: 25px;
-}
-/* 시간, 조회수 */
-.date-view div {
-	color: gray;
-}
-/* 내용 */
-.contents {
-	height: 400px;
-	padding: 5px;
-	overflow: auto;
-}
-
-.contents .col {
-	height: 100%
-}
-/* 글 작성자 관련 버튼들 + 목록으로 */
-.btns {
-	gap: 5px;
-}
-
-.btns div {
-	height: 5%;
-}
-
-/* 댓글 박스 */
-.replies {
-	width: 100%;
-	border: 1px solid black;
-	gap: 5px;
-	display: flex;
-	justify-content: between;
-}
-/* 댓글 입력 div */
-.replies .replyDiv {
-	border: 1px solid black;
-	margin: 5px;
-	display: flex;
-	justify-content: start;
-	align-items: center;
-	padding-left: 5px;
-}
-/* 댓글 등록 버튼 */
-.replyBtn {
-	margin: 5px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-#replyBtn {
-	width: 100%;
-	height: 100%;
-}
-/* 댓글 출력시 작성자 */
-.replyWriter {
-	margin-left: 15px;
-	margin-right: 15px;
-}
-
-/* 댓글 출력시 내용 */
-.replyContentsDiv {
-	margin-top: 5px;
-	margin-left: 20px;
-	margin-right: 15px;
-	width: 95%;
-}
-
-/* 댓글 출력시 날짜 */
-.replyWrite_date {
-	margin-left: 23px;
-	margin-right: 15px;
-	font-size: 12px;
-}
-/* 댓글 출력시 수정, 삭제 버튼들 */
-.replyBtns {
-	display: flex;
-	justify-content: end;
-}
-
-.replyBtns button {
-	display: flex;
-	justify-content: end;
-	margin-right: 15px;
-	margin-bottom: 5px;
-}
-/* reply 구분선 */
-#replyHr {
-	width: 97%;
-	margin-left: auto;
-	margin-right: auto;
-}
-</style>
+<!-- css -->
+<link rel="stylesheet" href="/resources/css/board/detail.css">
 
 </head>
 
@@ -159,7 +42,7 @@
 					<!-- 제목 -->
 					<div class="row title">
 						<div class="col" contenteditable="false" id="dto-title"
-							name="dto-title">${dto.title }</div>
+							name="title">${dto.title }</div>
 					</div>
 					<!-- 작성자 -->
 					<div class="row writer">
@@ -180,7 +63,7 @@
 					<!-- 글 내용 -->
 					<div class="row contents">
 						<div class="col" id="dto-contents" contenteditable="false"
-							name="dto-contents">
+							name="contents">
 							${dto.contents}
 						</div>
 					</div>
@@ -190,12 +73,12 @@
 						<c:if test="${loginId == dto.writer }">
 
 							<div class="col btns text-end">
-								<form id="delete-Frm" action="/delete.board" method="post">
+								<form id="delete-Frm" action="/board/delete" method="post">
 									<button type="button" class="btn btn-dark d-none" id="noBtn">취소</button>
 									<button type="button" class="btn btn-dark d-none" id="okBtn">수정완료</button>
 
 									<button class="btn btn-dark" id="deleteBtn">삭제하기</button>
-									<input type="hidden" value="${dto.seq}" name="dto_seq2"
+									<input type="hidden" value="${dto.seq}" name="seq"
 										id="dto_seq2">
 
 									<button type="button" class="btn btn-dark" id="updateBtn">수정하기</button>
@@ -211,11 +94,11 @@
 						</c:if>
 					</div>
 					<!-- 글 내용 update form -->
-					<form id="detail-Frm" action="/update.board" method="post">
-						<input type="hidden" value="${dto.seq}" name="dto_seq"
+					<form id="detail-Frm" action="/board/update" method="post">
+						<input type="hidden" value="${dto.seq}" name="seq"
 							id="dto_seq"> <input type="hidden" value="${dto.title}"
-							name="dto_title" id="dto_title"> <input type="hidden" 
-							value="<c:out value='${dto.contents}'/>" name="dto_contents" id="dto_contents">
+							name="title" id="dto_title"> <input type="hidden" 
+							value="<c:out value='${dto.contents}'/>" name="contents" id="dto_contents">
 					</form>
 				</div>
 
@@ -255,8 +138,8 @@
 											data-reply-seq="${replyDto.seq}" data-parent-seq="${dto.seq}">삭제</button>
 
 										<input type="hidden" class="reply_contents"
-											value="${replyDto.contents}" name="reply_contents"> <input
-											type="hidden" class="reply_seq" name="reply_seq"
+											value="${replyDto.contents}" name="contents"> <input
+											type="hidden" class="reply_seq" name="seq"
 											value="${replyDto.seq}"> <input type="hidden"
 											class="parent_seq" name="parent_seq" value="${dto.seq}">
 									</div>
@@ -270,10 +153,10 @@
 				</div>
 
 				<!-- 댓글 insert form -->
-				<form id="reply-insert-Frm" action="/insert.reply" method="post">
-					<input type="hidden" name="insert_reply_contents"
+				<form id="reply-insert-Frm" action="/reply/insert" method="post">
+					<input type="hidden" name="contents"
 						id="insert_reply_contents"> <input type="hidden"
-						name="insert_parent_seq" id="insert_parent_seq">
+						name="parent_seq" id="insert_parent_seq">
 				</form>
 
 			</div>
@@ -313,7 +196,7 @@
 				// 수정완료 버튼 클릭시
 				$("#okBtn").on("click", function() {
 					let form = $("#detail-Frm");
-					form.attr("action", "/update.board");
+					form.attr("action", "/board/update");
 
 					// 제목, 내용이 화면에 있는 경우 가져와서 넣기
 					let title = $("#dto-title").html();
@@ -335,7 +218,7 @@
 							$("#dto-contents").attr("contenteditable", false);
 
 							// 다시 원래 페이지로 돌아가게 하기
-							window.location.href = "/detail.board?seq="
+							window.location.href = "/board/detail?seq="
 									+ $("#dto_seq").val();
 						});
 
@@ -362,7 +245,7 @@
 					// 내용은 필요 없으니 제거
 					$(".reply_contents").html("");
 
-					form.attr("action", "/delete.reply");
+					form.attr("action", "/reply/delete");
 					form.submit();
 				});
 
@@ -433,7 +316,7 @@
 									"contenteditable", false);
 
 							// form action 추가하고 보내기
-							form.attr("action", "/update.reply");
+							form.attr("action", "/reply/update");
 							form.submit();
 						});
 			</script>

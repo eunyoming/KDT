@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.kedu.dao.ContactsDAO;
 import com.kedu.dto.ContactsDTO;
+import com.kedu.services.ContactsService;
 
 @Controller
 @RequestMapping("/contacts")
 public class ContactsController {
 
 	@Autowired
-	ContactsDAO dao;
+	ContactsService contactsService;
 
 
 	@RequestMapping(value = "/input")
@@ -29,7 +29,7 @@ public class ContactsController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insert(ContactsDTO dto) throws Exception{
 		System.out.println(dto.getName());
-		dao.insert(dto);
+		contactsService.insert(dto);
 
 		return "redirect:/";
 	}
@@ -37,7 +37,7 @@ public class ContactsController {
 	@RequestMapping(value = "/output")
 	public String getAllList(HttpServletRequest request) throws Exception{
 
-		List<ContactsDTO> list = dao.getAllList();
+		List<ContactsDTO> list = contactsService.getAllList();
 		request.setAttribute("list", list);
 
 		return "contacts/output";
@@ -46,7 +46,7 @@ public class ContactsController {
 	@RequestMapping("/delete")
 	public String deleteBySeq(int seq) throws Exception{
 
-		dao.deleteBySeq(seq);
+		contactsService.deleteBySeq(seq);
 
 		return "redirect:/contacts/output";
 	}
@@ -54,7 +54,7 @@ public class ContactsController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateBySeq(ContactsDTO dto) throws Exception{
 
-		dao.updateBySeq(dto);
+		contactsService.updateBySeq(dto);
 
 		return "redirect:/contacts/output";
 	}

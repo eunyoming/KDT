@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.kedu.services.ContactService.java&apos; to &apos;ContactsService.java&apos;&#x0D;&#x0A;- Original project: &apos;Day03_contacts&apos;&#x0D;&#x0A;- Original element: &apos;com.kedu.services.ContactService.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.kedu.services.ContactsService.java&apos;" description="Rename compilation unit &apos;ContactService.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.kedu.services{ContactService.java" name="ContactsService.java" references="false" stamp="1757998842516" version="1.0"/>
+</session>

@@ -45,10 +45,10 @@
 			<td colspan="2" align="center">
 				<form action="/messages/delete">
 					<input type="text" placeholder="input seq to delete" name="seq">
+				</form>
 			</td>
 			<td align="center">
 				<button>삭제</button>
-				</form>
 			</td>
 		</tr>
 		<tr>

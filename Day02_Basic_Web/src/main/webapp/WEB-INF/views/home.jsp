@@ -16,11 +16,35 @@
 <body>
 	<table border="1" align="center">
 		<tr>
-			<th colspan="2">Index</th>
+			<th colspan="2"><img src="/resources/img/health.png"></th>
 		</tr>
 		<tr>
-			<td><a href="/messages/input">입력하기</a></td>
-			<td><a href="/messages/output">출력하기</a></td>
+			<th colspan="2" align="center">Index</th>
+		</tr>
+		<tr>
+			<td align="center"><a href="/messages/input">입력하기</a></td>
+			<td align="center"><a href="/messages/output">출력하기</a></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<form action="/messages/selectBy">
+					<select name="column">
+							<option value="sender">작성자</option>
+							<option value="message">메세지</option>
+					</select> 
+					<input type="text" name="keyword" placeholder="검색할 내용">
+					<button>검색</button>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<form action="/messages/searchtByMultiple">
+					<input type="text" name="sender" placeholder="sender 검색"><br>
+					<input type="text" name="message" placeholder="message 검색"><br>
+					<button>검색</button>
+				</form>
+			</td>
 		</tr>
 	</table>
 </body>

@@ -1,40 +1,30 @@
 package com.kedu.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.kedu.commons.Config;
 import com.kedu.dto.BoardDTO;
 
 @Repository
 public class BoardDAO {
 
 	@Autowired
-	private JdbcTemplate jdbc;
+	private SqlSessionTemplate mybatis;
 
 	// insert
 	public int addBoard(BoardDTO dto){
-		String sql = "insert into board (seq, writer, title, contents, create_at, view_count) values (board_seq.nextval, ?, ?, ?, sysdate, 0)";
-		return jdbc.update(sql, dto.getWriter(), dto.getTitle(), dto.getContents());
-//		try(Connection con = this.getConnection();
-//				PreparedStatement pst = con.prepareStatement(sql)){
-//			pst.setString(1, dto.getWriter());
-//			pst.setString(2, dto.getTitle());
-//			pst.setString(3, dto.getContents());
-//			pst.setInt(4, 0);
-//
-//			return pst.executeUpdate();
-//		}	
+		
+		return mybatis.insert("Board.insert", dto);
+
 	}
 
 	// select * from board
 	public List<BoardDTO> getAllList(){
-		String sql = "select * from board order by seq desc";
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(BoardDTO.class));
+		return mybatis.selectList("Board.getAllList");
 //		try(Connection con = this.getConnection();  //여기는 springJDBC 안쓰시나요?
 //				PreparedStatement pst = con.prepareStatement(sql);
 //				ResultSet rs = pst.executeQuery();){
@@ -57,9 +47,8 @@ public class BoardDAO {
 	}
 
 	// getSelectFromTo / 원하는 게시물 수 만큼 가져오기.
-	public List<BoardDTO> getSelectFromTo(int from, int to){
-		String sql = "select * from (select board.*,  row_number() over(order by seq desc) rn from board) where rn between ? and ? order by 1 desc";
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(BoardDTO.class), from, to);
+	public List<BoardDTO> getSelectFromTo(Map<String, Integer> param){
+		return mybatis.selectList("Board.getSelectFromTo", param);
 //		try(Connection con = this.getConnection();
 //				PreparedStatement pst = con.prepareStatement(sql)){
 //			pst.setInt(1, from);
@@ -87,8 +76,7 @@ public class BoardDAO {
 
 	// select * from board where seq = ?
 	public BoardDTO getListBySeq(int seq) {
-		String sql = "select * from board where seq = ?";
-		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(BoardDTO.class), seq);
+		return mybatis.selectOne("Board.getListBySeq", seq);
 //		try(Connection con = this.getConnection();
 //				PreparedStatement pst = con.prepareStatement(sql);){
 //
@@ -112,28 +100,18 @@ public class BoardDAO {
 
 	// delete
 	public int deleteBySeq(int seq) {
-		String sql = "delete from board where seq = ?";
-		return jdbc.update(sql, seq);
+		return mybatis.delete("Board.deleteBySeq", seq);
 	}
 
 	// update
-	public int updateBySeq(String title, String contents, int seq) {
-		String sql = "update board set title = ?, contents = ? where seq = ?";
-		return jdbc.update(sql, title, contents, seq);
-//		try(Connection con = this.getConnection();
-//				PreparedStatement pst = con.prepareStatement(sql);){
-//			pst.setString(1, title);
-//			pst.setString(2, contents);
-//			pst.setInt(3, seq);
-//
-//			return pst.executeUpdate();
-//		}
+	public int updateBySeq(Map<String, Object> param) {
+		return mybatis.update("Board.updateBySeq", param);
 	}
 
 	// recordTotalCount
 	public int getRecordTotalCount() {
-		String sql = "select count(*) from board";
-		return jdbc.queryForObject(sql, Integer.class);
+		String sql = "";
+		return mybatis.selectOne("Board.getRecordTotalCount");
 //		try (Connection con = this.getConnection();
 //				PreparedStatement pstat = con.prepareStatement(sql);
 //				ResultSet rs = pstat.executeQuery();) {
@@ -144,75 +122,74 @@ public class BoardDAO {
 //		}
 	}
 
-	public String getPageNavi(int currentPage) throws Exception{
-		// 1. 전체 레코드가 몇 개인지?
-		int recordTotalCount = this.getRecordTotalCount();
-
-		// 2. 한 페이지 당 몇개의 게시글을 보여줄지?
-		int recordCountPerPage = Config.RECORD_COUNT_PER_PAGE;
-
-		// 3. 한 번에 네비게이터를 몇개씩 보여줄지?
-		int naviCountPerPage = Config.NAVI_COUNT_PER_PATE;
-
-		// 4. 전체 몇 페이지가 생성 될 지?
-		int pageTotalCount = 0;
-
-		if(recordTotalCount % recordCountPerPage > 0) { // 나머지가 있으면
-			pageTotalCount = (recordTotalCount / recordCountPerPage) + 1;
-
-		}else {
-			pageTotalCount = recordTotalCount / recordCountPerPage;
-		}
-
-		// 현재 내가 클릭해 둔 페이지
-
-		if(currentPage < 1) { // 음수 값 막기
-			currentPage = 1;
-		}else if(currentPage > pageTotalCount) { // 전체 페이지보다 큰 수 막기
-			currentPage = pageTotalCount;
-		}
-
-		// 네비게이터의 시작 값
-		int startNavi = (currentPage-1) / naviCountPerPage * naviCountPerPage + 1;
-		// 일의 자리를 잘라내는 효과
-
-		// 네비게이터의 끝 값
-		int endNavi = startNavi + (naviCountPerPage - 1);
-
-		if(endNavi > pageTotalCount) { // 전체 페이지 값보다 클 수 없으므로
-			endNavi = pageTotalCount;
-		}
-
-		boolean needPrev = true;
-		boolean needNext = true;
-
-		if(startNavi == 1) { // 시작페이지가 1 이라면
-			needPrev = false;
-		}
-		if(endNavi == pageTotalCount) { // 끝 페이지가 총 페이지와 같다면
-			needNext = false;
-		}
-
-		// String 쉽게 합쳐주는 라이브러리
-		StringBuilder sb = new StringBuilder();
-
-		if(needPrev) {
-			sb.append("<a href='/list.board?cpage=" + (startNavi-1) + "'>< </a>");
-		}
-
-		for(int i = startNavi; i<= endNavi; i++) {
-			sb.append("<a href='/list.board?cpage=" + i + "'>" + i + "</a> ");
-		}
-		if(needNext) {
-			sb.append(" <a href='/list.board?cpage=" + (endNavi+1) + "'> > </a>");
-		}
-
-		return sb.toString();
-	}
+//	public String getPageNavi(int currentPage) throws Exception{
+//		// 1. 전체 레코드가 몇 개인지?
+//		int recordTotalCount = this.getRecordTotalCount();
+//
+//		// 2. 한 페이지 당 몇개의 게시글을 보여줄지?
+//		int recordCountPerPage = Config.RECORD_COUNT_PER_PAGE;
+//
+//		// 3. 한 번에 네비게이터를 몇개씩 보여줄지?
+//		int naviCountPerPage = Config.NAVI_COUNT_PER_PATE;
+//
+//		// 4. 전체 몇 페이지가 생성 될 지?
+//		int pageTotalCount = 0;
+//
+//		if(recordTotalCount % recordCountPerPage > 0) { // 나머지가 있으면
+//			pageTotalCount = (recordTotalCount / recordCountPerPage) + 1;
+//
+//		}else {
+//			pageTotalCount = recordTotalCount / recordCountPerPage;
+//		}
+//
+//		// 현재 내가 클릭해 둔 페이지
+//
+//		if(currentPage < 1) { // 음수 값 막기
+//			currentPage = 1;
+//		}else if(currentPage > pageTotalCount) { // 전체 페이지보다 큰 수 막기
+//			currentPage = pageTotalCount;
+//		}
+//
+//		// 네비게이터의 시작 값
+//		int startNavi = (currentPage-1) / naviCountPerPage * naviCountPerPage + 1;
+//		// 일의 자리를 잘라내는 효과
+//
+//		// 네비게이터의 끝 값
+//		int endNavi = startNavi + (naviCountPerPage - 1);
+//
+//		if(endNavi > pageTotalCount) { // 전체 페이지 값보다 클 수 없으므로
+//			endNavi = pageTotalCount;
+//		}
+//
+//		boolean needPrev = true;
+//		boolean needNext = true;
+//
+//		if(startNavi == 1) { // 시작페이지가 1 이라면
+//			needPrev = false;
+//		}
+//		if(endNavi == pageTotalCount) { // 끝 페이지가 총 페이지와 같다면
+//			needNext = false;
+//		}
+//
+//		// String 쉽게 합쳐주는 라이브러리
+//		StringBuilder sb = new StringBuilder();
+//
+//		if(needPrev) {
+//			sb.append("<a href='/list.board?cpage=" + (startNavi-1) + "'>< </a>");
+//		}
+//
+//		for(int i = startNavi; i<= endNavi; i++) {
+//			sb.append("<a href='/list.board?cpage=" + i + "'>" + i + "</a> ");
+//		}
+//		if(needNext) {
+//			sb.append(" <a href='/list.board?cpage=" + (endNavi+1) + "'> > </a>");
+//		}
+//
+//		return sb.toString();
+//	}
 	
-	public void updateViewCntById(int target) {
-        String sql = "UPDATE board SET view_count = view_count+1 WHERE seq=?";
-        jdbc.update(sql, target);
+	public void updateViewCntBySeq(int target) {
+        mybatis.update("Board.updateViewCntBySeq", target);
     }
 }
 

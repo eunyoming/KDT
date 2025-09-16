@@ -1,0 +1,53 @@
+package com.kedu.services;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kedu.commons.CustomEncrypt;
+import com.kedu.dao.MembersDAO;
+import com.kedu.dto.MembersDTO;
+
+@Service
+public class MembersService {
+
+	@Autowired
+	private MembersDAO dao;
+	
+	public boolean checkLogin(String loginId, String loginPw) {
+		// 비밀번호 암호화
+		String pw = CustomEncrypt.encrypt(loginPw);
+		// 묶어서 보내기
+		Map<String, String> param = new HashMap<>();
+		param.put("loginId", loginId);
+		param.put("pw", pw);
+		
+		return dao.checkLogin(param);
+	}
+	
+	public int insert(MembersDTO dto) {
+		// 비밀번호 암호화
+		dto.setPw(CustomEncrypt.encrypt(dto.getPw()));
+		return dao.insert(dto);
+	}
+	
+	public int deleteById(String loginId) {
+		return dao.deleteById(loginId);
+	}
+	
+	public MembersDTO getMemberById(String loginId) {
+		return dao.getMemberById(loginId);
+	}
+	
+	public int updateById(String loginId, MembersDTO dto) {
+		dto.setId(loginId);
+		return dao.updateById(dto);
+	}
+	
+	public boolean isIdExist(String id) {
+		return dao.isIdExist(id);
+	}
+	
+}

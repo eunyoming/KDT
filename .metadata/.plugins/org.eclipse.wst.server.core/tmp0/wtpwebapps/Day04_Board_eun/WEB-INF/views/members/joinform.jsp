@@ -23,75 +23,8 @@
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
 	type="text/javascript"></script>
 
-<style type="text/css">
-* {
-	box-sizing: border-box;
-}
-
-.container {
-	width: 700px;
-	padding: 20px;
-	margin: auto;
-	margin-top: 10px;
-	border-radius: 10px;
-	position: relative;
-	background: linear-gradient(white, white) padding-box, /* 내부 흰색 */
-    linear-gradient(135deg, rgb(155, 93, 248), rgb(255, 85, 215))
-		border-box; /* 테두리 그라데이션 */
-	border: 2px solid transparent; /* 투명 테두리로 그라데이션 배경 보이게 */
-	background-origin: border-box;
-	background-clip: padding-box, border-box;
-}
-
-.container div {
-	padding: 0;
-}
-
-.row {
-	width: 100%;
-}
-
-/* 헤더 */
-.header_text {
-	text-align: center;
-	background: linear-gradient(135deg, rgb(88, 17, 194), rgb(255, 85, 215));
-	color: white;
-	border-radius: 12px;
-	font-size: 20px;
-}
-
-/* input */
-.input_text {
-	text-align: right;
-}
-
-.col-2 {
-	text-align: right;
-}
-
-.input {
-	width: 50%;
-}
-
-.input_addr {
-	width: 80%;
-}
-
-/* 푸터 */
-.join_footer {
-	text-align: center;
-}
-
-/* 버튼들 */
-.btn {
-	width: 100px;
-	border: 1px solid rgb(255, 85, 215);
-	color: rgb(155, 93, 248);
-	border-radius: 5px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-}
-</style>
+<!-- css -->
+<link rel="stylesheet" href="/resources/css/members/joinform.css">
 
 </head>
 
@@ -187,15 +120,7 @@
 		</div>
 	</form>
 
-	<script type="text/javascript">
-		// 아이디 중복체크 여부 확인하는 변수
-		let isIdChecked = false;
-
-		// true로 만들어주는 함수 하나 생성
-		function isIdCheckedToTrue() {
-			return true;
-		}
-
+	<script>
 		// 다음 우편번호 API
 		function sample4_execDaumPostcode() {
 			new daum.Postcode({
@@ -209,14 +134,28 @@
 		}
 
 		// ID 중복체크 팝업창
+		let isDuplCheck = false;
+		
+		// 아이디 입력 시 중복 체크 상태 초기화
+	    $("#id").on("input", function () {
+	        isDuplCheck = false;
+	    });
+		
 		$("#duplCheck").on(
 				"click",
 				function() {
-
-					// 팝업창 url 로 id 값 보내기
-					window.open(
-							"/idcheck.members?id=" + $("#id").val(),
-							"", "width=300,height=200");
+					$.ajax({
+						url:"/members/isIdExist",
+						data:{"id" : $("#id").val()}
+					}).done(resp){
+						if(!resp){
+							alert("사용 가능한 아이디입니다.");
+							isDuplCheck = true;
+						}else{
+							alert("중복된 아이디 입니다.");
+							$("#id").val("").focus();
+						}
+					}
 				})
 
 		// (유효성 검사) 회원가입 버튼 클릭시
@@ -224,6 +163,13 @@
 				.on(
 						"submit",
 						function() {
+							// 중복 체크 여부 확인
+						    if (!isDuplCheck) {
+						        alert("아이디 중복 체크를 먼저 해주세요.");
+						        $("#duplCheck").focus();
+						        return false;
+						    }
+							
 							// 정규식
 							let regexId = /^[a-z0-9_]{4,12}$/;
 							let regexPw = /^([a-zA-Z0-9]|[^a-zA-Z0-9\s]){8,16}$/;
