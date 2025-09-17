@@ -1,2 +1,8 @@
 1758010690083	Delete element
 1758011685642	Move files
+1758080129586	Delete element
+1758083673044	Rename type 'FileController'
+1758083966642	Rename type 'FilesDAO'
+1758083978375	Rename type 'FilesDTO'
+1758083987259	Rename type 'FilesService'
+1758083997614	Rename type 'FilesController'

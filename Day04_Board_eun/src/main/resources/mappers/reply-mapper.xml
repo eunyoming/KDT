@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Reply">
+
+	<insert id="insertReply">
+		insert into reply values(reply_seq.nextval, #{writer}, #{contents}, sysdate, #{parent_seq})
+		<selectKey order="AFTER" keyProperty="seq" resultType="int">
+			select reply_seq.currval from dual
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteBySeq">
+		delete from reply where seq = #{seq}
+	</delete>
+	
+	<update id="updateBySeq">
+		update reply set contents = #{contents} where seq = #{seq}
+	</update>
+	
+	<select id="" resultType="com.kedu.dto.ReplyDTO">
+		select * from reply
+	</select>
+	
+	<select id="getListBySeq" resultType="com.kedu.dto.ReplyDTO">
+		select * from reply where parent_seq = #{parent_seq} order by seq desc
+	</select>
+	
+	<select id="getBySeq" resultType="com.kedu.dto.ReplyDTO">
+		select * from reply where seq = #{seq}
+	</select>
+	
+</mapper>

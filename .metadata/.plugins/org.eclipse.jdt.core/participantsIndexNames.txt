@@ -21,6 +21,8 @@ C:\sts3_workspace\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\38515680
 \Day04_Board_ju\src\main\java
 C:\sts3_workspace\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3811487693.index
 \Day03_contacts\src\main\java
+C:\sts3_workspace\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2421736092.index
+\Day06_WebSocket\src\main\java
 C:\sts3_workspace\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2762609699.index
 \Day04_Board\src\main\java
 C:\sts3_workspace\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1945968890.index

@@ -99,7 +99,9 @@
 
 				<div class="row footer mt-4">
 					<div class="col d-flex justify-content-center align-items-center">
-						<button type="button" id="backBtn">뒤로가기</button>
+						<a href="/">
+							<button type="button" id="backBtn">뒤로가기</button>
+						</a>
 					</div>
 				</div>
 			</div>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        div{
+            border: 1px solid black;
+        }
+        .box{
+            width: 100px;
+            height: 100px;
+            position: relative;
+            left: 100px;
+        }
+
+        .box img{
+            width: 100%;
+            height: 100%;
+        }
+        
+        #box2{
+            top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box1" class="box">
+        <img src="bear_2.gif" id="bear_2">
+    </div>
+    <div id="box2" class="box"></div>
+    <button id="move">이동</button>
+
+    <script>
+        // 이동 버튼 눌렀을 때 - 이동
+        $("#move").on("click",function(){
+            // 복사본 만들기
+            $("#box2").append($("#bear_2").clone());
+        })
+
+
+    </script>
+</body>
+
+</html>

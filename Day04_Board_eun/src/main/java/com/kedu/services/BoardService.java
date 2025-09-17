@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kedu.commons.Config;
 import com.kedu.dao.BoardDAO;
@@ -34,7 +35,8 @@ public class BoardService {
 	public int getRecordTotalCount() {
 		return boardDAO.getRecordTotalCount();
 	}
-
+	
+	@Transactional
 	public int addBoard(String loginId, BoardDTO dto) {
 		dto.setWriter(loginId);
 		return boardDAO.addBoard(dto);

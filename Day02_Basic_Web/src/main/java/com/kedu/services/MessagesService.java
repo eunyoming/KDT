@@ -6,20 +6,29 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kedu.dao.MessagesDAO;
 import com.kedu.dto.MessagesDTO;
 
 // 컴포넌트로 인스턴스화 필요
 // 웹과 관련없는 root-context에서 스캔 돌리기
+// Transaction
+// 1. 원자성
+// 2. 일관성
+// 3. 독립성
+// 4. 지속성
 @Service
 public class MessagesService {
 	
 	@Autowired
 	private MessagesDAO dao;
 	
+	@Transactional
 	public int insert(MessagesDTO dto) {
-		return dao.insert(dto);
+		dao.insert(dto);
+		dao.deleteBySeq(3);
+		return 0;
 	}
 	
 	public List<MessagesDTO> selectAll(){

@@ -56,6 +56,7 @@
 							<input type="text" name="title" placeholder="글 제목을 입력하세요.">
 						</div>
 					</div>
+					<input type="file" name="files" id="files" multiple>
 					<div class="row contents g-0">
 						<div class="col contentsDiv" id="summernote"></div>
 						<input type="hidden" name="contents" id="contents">
@@ -73,9 +74,7 @@
 
 			<script>
 				// 썸머노트 API 실행
-				$(document)
-						.ready(
-								function() {
+				$(document).ready(function() {
 									// 1. contents 영역 높이 가져오기
 									let contentsHeight = $(".contents")
 											.height();
@@ -134,10 +133,6 @@
 					$("#contents").val(htmlContent);
 					$("#add-Frm").submit();
 				});
-
-				// Summernote 로딩 확인
-				// console.log(typeof $.summernote); // 결과가 "function"이어야 정상
-				// console.log($.summernote); // 결과가 undefined면 Summernote가 로딩되지 않은 것
 			</script>
 		</c:otherwise>
 	</c:choose>

@@ -1,129 +1,46 @@
 package com.kedu.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kedu.dto.ReplyDTO;
 
 @Repository
 public class ReplyDAO {
-	private static ReplyDAO instance;
-
-	// DAO 생성 막기
-	private ReplyDAO() {}
-
-	// DAO getter
-	public synchronized static ReplyDAO getInstance() {
-		if(instance == null) {
-			instance = new ReplyDAO();
-		}
-		return instance;
-	}
-
-	// Connection
-	public Connection getConnection() throws Exception{
-		Context ctx = new InitialContext();
-
-		DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/oracle");
-		return ds.getConnection();
-	}
+	
+	@Autowired
+	private SqlSessionTemplate mybatis;
 
 	// insert
-	public int insertReply(ReplyDTO dto) throws Exception{
-		String sql = "insert into reply values(reply_seq.nextval, ?, ?, sysdate, ?)";
-
-		try(Connection con = this.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql)){
-			pst.setString(1, dto.getWriter());
-			pst.setString(2, dto.getContents());
-			pst.setInt(3, dto.getParent_seq());
-
-			return pst.executeUpdate();
-		}
+	public int insertReply(ReplyDTO dto) {
+		mybatis.insert("Reply.insertReply", dto);
+		return dto.getSeq();
 	}
 
 	// "select * from reply";
-	public List<ReplyDTO> getAllList() throws Exception{
-		String sql = "select * from reply";
-
-		try(Connection con = this.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql);
-				ResultSet rs = pst.executeQuery();){
-
-			List<ReplyDTO> list = new ArrayList<>();
-			while(rs.next()) {
-				int seq = rs.getInt("seq");
-				String writer = rs.getString("writer");
-				String contents = rs.getString("contents");
-				Timestamp write_date = rs.getTimestamp("write_date");
-				int parent_seq = rs.getInt("parent_seq");
-
-				ReplyDTO dto = new ReplyDTO(seq, writer, contents, write_date, parent_seq);
-				list.add(dto);
-			}
-			return list;
-		}
+	public List<ReplyDTO> getAllList() {
+		return mybatis.selectList("Reply.getAllList");
 	}
 
 	// select * from reply where parent_seq = ?
-	public List<ReplyDTO> getListBySeq(int parent_seq) throws Exception{
-		String sql = "select * from reply where parent_seq = ? order by seq desc";
-
-		try(Connection con = this.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql);){
-			pst.setInt(1, parent_seq);
-
-			try(ResultSet rs = pst.executeQuery();){
-
-				List<ReplyDTO> list = new ArrayList<>();
-
-				while(rs.next()) {
-					int seq = rs.getInt("seq");
-					String writer = rs.getString("writer");
-					String contents = rs.getString("contents");
-					Timestamp write_date = rs.getTimestamp("write_date");
-					parent_seq = rs.getInt("parent_seq");
-
-					ReplyDTO dto = new ReplyDTO(seq, writer, contents, write_date, parent_seq);
-					list.add(dto);
-				}
-				return list;
-			}
-		}
+	public List<ReplyDTO> getListBySeq(int parent_seq) {
+		return mybatis.selectList("Reply.getListBySeq", parent_seq);
 	}
-
+	
+	public ReplyDTO getBySeq(int seq) {
+		return mybatis.selectOne("Reply.getBySeq", seq);
+	}
 	// delete
-	public int deleteBySeq(int seq) throws Exception{
-		String sql = "delete from reply where seq = ?";
-
-		try(Connection con = this.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql)){
-			pst.setInt(1, seq);
-
-			return pst.executeUpdate();
-		}
+	public int deleteBySeq(int seq) {
+		return mybatis.delete("Reply.deleteBySeq", seq);
 	}
 
 	// update
-		public int updateBySeq(String contents, int seq) throws Exception{
-			String sql = "update reply set contents = ? where seq = ?";
-
-			try(Connection con = this.getConnection();
-					PreparedStatement pst = con.prepareStatement(sql)){
-				pst.setString(1, contents);
-				pst.setInt(2, seq);
-
-				return pst.executeUpdate();
-			}
+		public int updateBySeq(Map<String, Object> param) {
+			return mybatis.update("Reply.updateBySeq", param);
 		}
 }

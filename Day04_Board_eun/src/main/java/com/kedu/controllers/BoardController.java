@@ -7,14 +7,16 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kedu.commons.Config;
-import com.kedu.dao.BoardDAO;
 import com.kedu.dto.BoardDTO;
+import com.kedu.dto.ReplyDTO;
 import com.kedu.services.BoardService;
+import com.kedu.services.ReplyService;
 
 @Controller
 @RequestMapping("/board")
@@ -22,6 +24,9 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private ReplyService replyService;
 	
 	@RequestMapping("/write")
 	public String write() {
@@ -54,7 +59,12 @@ public class BoardController {
 		// 조회수 증가
 		boardService.updateViewCntBySeq(seq);
 		BoardDTO dto = boardService.getListBySeq(seq);
+		
+		// 댓글 가져오기
+		List<ReplyDTO> list = replyService.getListBySeq(seq);
 		m.addAttribute("dto", dto);
+		m.addAttribute("list", list);
+		
 		return "/board/detail";
 	}
 	
@@ -69,5 +79,11 @@ public class BoardController {
 		// 조회수 증가
 		boardService.deleteBySeq(seq);
 		return "redirect:/board/list";
+	}
+	
+	@ExceptionHandler(Exception.class) // 예외계 Object 같은 느낌 모든 예외의 조상
+	public String exceptionHandler(Exception e) {
+		e.printStackTrace();
+		return "redirect:/error";
 	}
 }
