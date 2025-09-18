@@ -116,7 +116,15 @@
 														      ["table", ["table"]],
 														      ["insert", ["link", "picture", "video"]],
 														      ["view", ["fullscreen", "codeview", "help"]]
-														    ]
+														    ],
+														    
+														    callbacks: {
+													            onImageUpload: function(files) {
+													                for (let i = 0; i < files.length; i++) {
+													                    uploadImage(files[i], this);
+													                }
+													            }
+													        }
 														  });
 									// note-editable 영역 (에디터 본문) 높이 조정
 									$(".note-editable").css("height", editableHeight + "px");
@@ -133,6 +141,28 @@
 					$("#contents").val(htmlContent);
 					$("#add-Frm").submit();
 				});
+
+				function uploadImage(file, editor) {
+				    let data = new FormData();
+				    data.append("file", file);
+
+				    $.ajax({
+				        url: "/file/upload",   // 서버 업로드 엔드포인트
+				        type: "POST",
+				        data: data,
+				        cache: false,
+				        contentType: false,
+				        processData: false,
+				        success: function(url) {
+				            // 성공하면 Summernote에 <img src="..."> 추가
+				            $(editor).summernote('insertImage', url);
+				        },
+				        error: function(err) {
+				            console.log("Upload failed:", err);
+				        }
+				    });
+				}
+				
 			</script>
 		</c:otherwise>
 	</c:choose>

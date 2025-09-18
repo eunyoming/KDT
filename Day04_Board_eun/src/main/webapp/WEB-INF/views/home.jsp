@@ -25,7 +25,6 @@
 </head>
 
 <body>
-
 	<c:choose>
 		<c:when test="${loginId == null}">
 			<form action="/members/login" method="post">
@@ -90,11 +89,18 @@
 				<div class="container mt-4">
 					<div><h5><b>${loginId }님 안녕하세요.</b></h5></div>
 					<div class="btns">
+						<a href="/chat/join">
+							<button type="button" class="login_btn">채팅 참여</button>
+						</a>
 						<a href="/board/list">
 							<button type="button" class="login_btn">회원게시판</button>
-						</a> <a href="/members/mypage">
+						</a>
+						<a href="/members/mypage">
 							<button type="button" class="login_btn">마이페이지</button>
-						</a> <a href="/members/logout"><button class="join_btn">로그아웃</button></a>
+						</a>
+						<a href="/members/logout">
+							<button class="join_btn">로그아웃</button>
+						</a>
 						<form id="deleteFrm" action="/members/delete" method="post">
 							<button id="deleteBtn" type="submit" class="join_btn">회원탈퇴</button>
 						</form>
@@ -110,7 +116,7 @@
 					if (!result) {
 						return false;
 					}
-				})
+				})						
 			</script>
 
 		</c:otherwise>

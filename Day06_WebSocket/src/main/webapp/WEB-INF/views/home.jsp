@@ -237,36 +237,56 @@
 
 
     <script>
+    // 1. 웹소켓 인스턴스 생성
     let ws = new WebSocket("ws://10.5.5.8/chat"); // localhost라고 하면 클라이언트의 localhost로 접속되므로 ip 사용
  	
-    ws.onmessage = (e)=> {	
-    	// 채팅방으로 보낼 div + 시간 div
-        let msgbox = $("<div>").addClass("msgbox");
-
-        // 현재 시간 가져오기
-        let now = new Date();
-        let timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        // 시간 div
-        let timebox = $("<div>").addClass("timebox").text(timeStr);
-
-        // 메세지 div
-        let msgdiv = $("<div>").addClass("msgdiv").html(e.data);
-
-        // 합치기
-        msgbox.append(timebox).append(msgdiv);
-    	$("#chatroom").append(msgbox);
-
+    // 3. 서버로부터 메세지 받기
+    ws.onmessage = (e)=> { // 받는 타입이 2가지 (history, chat)
+    	console.log(e);
+	
+     	// 다시 역직렬화 
+    	let data = JSON.parse(e.data);
+    	console.log(data.type);
+    	if(data.type == "chat"){
+    		// 합치기
+    		displayChat(data.data);
+    	}else if(data.type == "history"){
+    		for(let i of data.data){
+    			// 합치기
+				displayChat(i);
+    		}
+    	}
         // 스크롤 제일 아래로 이동
         $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
     }
+    
+    // 메세지 div들 합치는 함수
+    function displayChat(chat){
+    	// 채팅방으로 보낼 메세지 박스 div
+	    let msgbox = $("<div>").addClass("msgbox");
+
+	 	// 현재 시간 가져오기
+	    let now = new Date();
+	    let timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	 	// 시간 div
+	    let timebox = $("<div>").addClass("timebox").text(timeStr);
+		
+        // 메세지 내용 담을 div
+        let msgdiv = $("<div>").addClass("msgdiv").html(chat);
+        
+        // 합치기
+	    msgbox.append(msgdiv).append(timebox);
+	    $("#chatroom").append(msgbox);
+	}
+
+    
     
     // 공통 함수: 입력값 읽어서 채팅 전송
     function sendMessage() {
         let msg = $("#inputchat").html().trim();
         if (msg === "") return; // 빈값이면 무시
 
-        // 서버로 메세지 내용 보내기
+        // 2. 서버로 메세지 내용 보내기
         ws.send(msg);
 
         // 입력창 비우기
@@ -295,10 +315,14 @@
             $(".emojibox").css("display", "inline-block");
         })
 
-        // 이모지 하나 눌렀을 때 채팅 입력창으로 이모지 복사해오기
+        // 이모지 하나 눌렀을 때 채팅 입력창에 '하나만' 넣고 즉시 전송
 		$(document).on("click", ".emojibox img", function () {
-		    $("#inputchat").append($(this).clone());
+		    let emoji = $(this).clone();    // 선택한 이모지 복사
+		    $("#inputchat").html(emoji);    // 입력창에 교체 (append → html)
+		    sendMessage();                  // 바로 전송
+		    $(".emojibox").hide();          // 이모지 박스 닫기
 		});
+
 
 
     </script>

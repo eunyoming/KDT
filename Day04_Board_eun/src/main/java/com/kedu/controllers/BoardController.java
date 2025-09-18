@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kedu.commons.Config;
 import com.kedu.dto.BoardDTO;
@@ -48,9 +49,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public String insert(BoardDTO dto, HttpSession session) {
+	public String insert(BoardDTO dto, HttpSession session, String text, MultipartFile[] files) throws Exception{
 		String loginId = (String)session.getAttribute("loginId");
-		boardService.addBoard(loginId, dto);
+	
+		String realPath =session.getServletContext().getRealPath("upload");
+		
+		boardService.addBoard(loginId, dto, realPath, files);
 		return "redirect:/board/list";
 	}
 	

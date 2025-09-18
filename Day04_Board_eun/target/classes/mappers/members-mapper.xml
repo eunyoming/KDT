@@ -5,9 +5,9 @@
 
 <mapper namespace="Join">
 
-	<select id="isIdExist" resultType="java.lang.String">
-		select id from members where
-		id like #{id}
+	<select id="isIdExist" resultType="int">
+		select count(*) from members where
+		id = #{id}
 	</select>
 	<select id="checkLogin" resultType="int">
 		select count(*) from members

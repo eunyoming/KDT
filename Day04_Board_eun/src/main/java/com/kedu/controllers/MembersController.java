@@ -103,11 +103,10 @@ public class MembersController {
 	}
 
 	// id 중복 체크 요청
+	@ResponseBody
 	@RequestMapping("/isIdExist")
-	public String isIdExist(String id) throws Exception{
-		membersService.isIdExist(id);
-		
-		return "members/join";
+	public boolean isIdExist(String id) {
+	    return membersService.isIdExist(id);
 	}
 
 	@ExceptionHandler(Exception.class) // 예외계 Object 같은 느낌 모든 예외의 조상

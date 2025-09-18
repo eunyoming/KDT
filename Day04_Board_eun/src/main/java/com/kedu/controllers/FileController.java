@@ -21,40 +21,36 @@ import com.kedu.services.FileService;
 @Controller
 @RequestMapping("/file")
 public class FileController {
+	
 	@Autowired
 	private FileService filesService;
 
-	@RequestMapping("/upload")
-	public String upload(String text, MultipartFile[] files, HttpSession session) throws Exception{
-		String realPath = session.getServletContext().getRealPath("upload");
-
-//		File realPathFile = new File(realPath);
-//		if(!realPathFile.exists()) {
-//			realPathFile.mkdir();
-//		}
-		for(MultipartFile file : files) {
-			// 파일이 비어있지 않다면
-			if(!file.isEmpty()) {
-				String oriName = file.getOriginalFilename();
-				// UUID : 유니크한 식별자 ID를 만들어내는 함수
+//	@RequestMapping("/upload")
+//	public String upload(String text, MultipartFile[] files, HttpSession session) throws Exception{
+//		String realPath = session.getServletContext().getRealPath("upload");
+//
+//
+//		for(MultipartFile file : files) {
+//			// 파일이 비어있지 않다면
+//			if(!file.isEmpty()) {
+//				String oriName = file.getOriginalFilename();
+//				// UUID : 유니크한 식별자 ID를 만들어내는 함수
 //				String sysName = UUID.randomUUID() + "_" + oriName;
-
-				// upload 파일에 저장 ( 파일경로 + 파일명 )
+//
+//				// upload 파일에 저장 ( 파일경로 + 파일명 )
 //				file.transferTo(new File(realPath + "/" + sysName));
-				filesService.upload(text, realPath, oriName, file.getBytes());
-				// DB 작업
+//				filesService.upload(text, realPath, oriName, file.getBytes());
+//				// DB 작업
 //				fileService.insert(new FileDTO(0, text, oriName, sysName, 0));
-			}
-			
-			
-		}
-		return "redirect:/";
-	}
+//			}	
+//		}
+//		return "redirect:/";
+//	}
 	
 	@ResponseBody
 	@RequestMapping("/list")
 	public List<FileDTO> list() {
-		return filesService.getAllFiles();
+		return filesService.getAllList();
 	}
 	
 	@RequestMapping("/download")
@@ -77,5 +73,30 @@ public class FileController {
 		}
 	}
 	
+	@ResponseBody
+	@RequestMapping("/upload")
+	public String upload(MultipartFile file, HttpSession session) throws Exception {
+	    String realPath = session.getServletContext().getRealPath("upload");
 
+	    File realPathDir = new File(realPath);
+	    if (!realPathDir.exists()) realPathDir.mkdir();
+
+	    // 원래 파일명, 시스템 파일명
+	    String oriname = file.getOriginalFilename();
+	    String sysname = System.currentTimeMillis() + "_" + oriname;
+
+	    // 실제 저장
+	    file.transferTo(new File(realPath, sysname));
+
+	    // 파일 DB 저장
+	    FileDTO dto = new FileDTO();
+	    dto.setOriName(oriname);
+	    dto.setSysName(sysname);
+	    // writer, parent_seq는 상황에 맞게 추가
+	    filesService.insert(dto);
+
+	    // 이미지 URL 리턴 (브라우저에서 접근 가능해야 함)
+	    return session.getServletContext().getContextPath() + "/upload/" + sysname;
+	}
+	
 }

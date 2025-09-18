@@ -13,10 +13,11 @@ public class MembersDAO {
 
 	@Autowired
 	private SqlSessionTemplate mybatis;
-
+	
 	// ID 중복검사
 	public boolean isIdExist(String id) {
-		return mybatis.selectOne("Join.isIdExist", id);
+	    int count = mybatis.selectOne("Join.isIdExist", id);
+	    return count > 0; // 있으면 true, 없으면 false
 	}
 
 	// insert

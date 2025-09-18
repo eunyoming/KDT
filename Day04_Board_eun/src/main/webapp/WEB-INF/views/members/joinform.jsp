@@ -147,7 +147,7 @@
 					$.ajax({
 						url:"/members/isIdExist",
 						data:{"id" : $("#id").val()}
-					}).done(resp){
+					}).done((resp) =>{
 						if(!resp){
 							alert("사용 가능한 아이디입니다.");
 							isDuplCheck = true;
@@ -155,7 +155,7 @@
 							alert("중복된 아이디 입니다.");
 							$("#id").val("").focus();
 						}
-					}
+					})
 				})
 
 		// (유효성 검사) 회원가입 버튼 클릭시
